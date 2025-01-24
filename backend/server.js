@@ -11,8 +11,33 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected successfully.'))
-    .catch((err) => console.log(err));
+// Basic route
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Welcome to the API!' });
+});
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Connect to MongoDB
+mongoose
+    .connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('MongoDB connected successfully.'))
+    .catch((err) => {
+        console.error('Error connecting to MongoDB:', err.message);
+        process.exit(1); // Exit process with failure
+    });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Unhandled Error:', err.message);
+    res.status(500).json({
+        error: 'An unexpected error occurred on the server.',
+        details: err.message,
+    });
+});
+
+// Start the server
+app.listen(PORT, () =>
+    console.log(`Server running on port: http://localhost:${PORT}`)
+);
