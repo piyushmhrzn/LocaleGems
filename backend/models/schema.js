@@ -39,6 +39,14 @@ const BusinessSchema = new mongoose.Schema({
     distanceFromEvent: { type: Number }
 });
 
+
+// Create Models
+const User = mongoose.model('User', UserSchema);
+const Event = mongoose.model('Event', EventSchema);
+const Destination = mongoose.model('Destination', DestinationSchema);
+const Business = mongoose.model('Business', BusinessSchema);
+const Blog = mongoose.model('Blog', BlogSchema);
+
 // Blog Schema
 const BlogSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -47,12 +55,8 @@ const BlogSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Create Models
-const User = mongoose.model('User', UserSchema);
-const Event = mongoose.model('Event', EventSchema);
-const Destination = mongoose.model('Destination', DestinationSchema);
-const Business = mongoose.model('Business', BusinessSchema);
-const Blog = mongoose.model('Blog', BlogSchema);
+
+
 
 // Export Models
 module.exports = { User, Event, Destination, Business, Blog };
