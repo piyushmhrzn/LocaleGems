@@ -3,18 +3,16 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+
+
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-
-// Basic route
-app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Welcome to the API!' });
-});
 
 // Connect to MongoDB
 mongoose
@@ -27,6 +25,13 @@ mongoose
         console.error('Error connecting to MongoDB:', err.message);
         process.exit(1); // Exit process with failure
     });
+
+
+// Basic route
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Welcome to the API!' });
+});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
