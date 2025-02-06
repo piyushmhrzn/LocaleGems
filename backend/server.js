@@ -9,7 +9,8 @@ const app = express();
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON request bodies
 
-const PORT = process.env.PORT || 3000;
+// Getting the port from .env file
+const PORT = process.env.PORT || 3000; 
 
 // ✅ Import all route files
 const UserRoutes = require('./routes/userRoutes');
