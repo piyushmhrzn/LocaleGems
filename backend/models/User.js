@@ -12,7 +12,12 @@ const UserSchema = new mongoose.Schema(
         city: { type: String },
         country: { type: String },
         image: { type: String },
-        role: { type: String, enum: ['admin', 'owner', 'user'], default: 'user' },
+        role: {
+            type: String,
+            enum: ['admin', 'owner', 'user'],
+            default: 'user',
+            required: true
+        },
         status: { type: Number, enum: [0, 1], default: 1 },
     },
     { timestamps: true }
