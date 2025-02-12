@@ -1,25 +1,157 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Navbar, Nav, Container, Form, FormControl, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import "./Navbar.css"; // Create this file for styling
+import { BiSearch, BiUser } from "react-icons/bi";
+import { motion } from "framer-motion";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const NavBar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [searchVisible, setSearchVisible] = useState(false); // To toggle search input visibility
+
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 50);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const toggleSearch = () => {
+    setSearchVisible(!searchVisible);
+  };
 
   return (
-    <nav className="navbar">
-      <div className="logo">Festora</div>
-      <div className="menu-icon" onClick={() => setIsOpen(!isOpen)}>
-        ☰
-      </div>
-      <ul className={isOpen ? "nav-links open" : "nav-links"}>
-        <li><Link to="/" onClick={() => setIsOpen(false)}>Home</Link></li>
-        <li><Link to="/explore" onClick={() => setIsOpen(false)}>Explore</Link></li>
-        <li><Link to="/blogs" onClick={() => setIsOpen(false)}>Blogs</Link></li>
-        <li><Link to="/about" onClick={() => setIsOpen(false)}>About Us</Link></li>
-        <li><Link to="/contact" onClick={() => setIsOpen(false)}>Contact</Link></li>
-      </ul>
-    </nav>
+    <Navbar
+      expand="lg"
+      className={`fixed-top ${scrolled ? "bg-dark shadow-lg" : ""}`} // Remove transparent bg on scroll
+      style={{
+        transition: "0.3s",
+        backdropFilter: scrolled ? "blur(10px)" : "none",
+        height: "70px", // Increased navbar height for better appearance
+      }}
+    >
+      <Container>
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 200, damping: 10 }}
+          style={{ display: "inline-block" }} // Important for motion to work on inline elements
+        >
+          <Navbar.Brand as={Link} to="/" className="fw-bold text-white">
+            LocaleGems
+          </Navbar.Brand>
+        </motion.div>
+
+        <Navbar.Toggle
+          aria-controls="navbar-nav"
+          className="border-0" // No border for the hamburger
+          style={{ backgroundColor: "white" }} // White hamburger icon
+        />
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="ms-auto">
+            {/* EVENTS */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Nav.Link as={Link} to="/events" className="text-white ms-3">
+                Events
+              </Nav.Link>
+            </motion.div>
+
+            {/* DESTINATIONS */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Nav.Link as={Link} to="/destinations" className="text-white ms-3">
+                Destinations
+              </Nav.Link>
+            </motion.div>
+
+            {/* BLOGS */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Nav.Link as={Link} to="/blogs" className="text-white ms-3">
+                Blogs
+              </Nav.Link>
+            </motion.div>
+
+            {/* ABOUT US */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Nav.Link as={Link} to="/about" className="text-white ms-3">
+                About Us
+              </Nav.Link>
+            </motion.div>
+
+            {/* CONTACT */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Nav.Link as={Link} to="/contact" className="text-white ms-3">
+                Contact
+              </Nav.Link>
+            </motion.div>
+          </Nav>
+
+          {/* Search Input Toggle */}
+          <div className="d-flex ms-3 align-items-center">
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Button variant="outline-none" size="lg" style={{ color: "white" }} onClick={toggleSearch}>
+                <BiSearch />
+              </Button>
+            </motion.div>
+
+            {searchVisible && (
+              <Form className="d-flex ms-3">
+                <FormControl
+                  type="search"
+                  placeholder="Search"
+                  className="me-2"
+                  aria-label="Search"
+                />
+              </Form>
+            )}
+          </div>
+
+          {/* Login Icon */}
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 200, damping: 10 }}
+            style={{ display: "inline-block" }}
+          >
+            <Nav.Link as={Link} to="/login" className="ms-3 text-white">
+              <BiUser size={22} />
+            </Nav.Link>
+          </motion.div>
+
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default NavBar;

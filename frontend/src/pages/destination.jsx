@@ -6,25 +6,25 @@ import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
 
-const Blogs = () => {
-  const { blogs } = useContext(AppContext);
+const Destinations = () => {
+  const { destinations } = useContext(AppContext);
 
   return (
     <>
       <NavBar />
 
       <Banner
-        heading="Our Blog"
-        subheading="Stay updated with the latest stories and insights."
-        backgroundImage="/images/blog-banner.jpg"
+        heading="Hidden Destinations you must visit"
+        subheading="We bring you all the hidden treasues from around the world."
+        backgroundImage="/images/destination-banner.jpg"
       />
 
       <Container>
-        <h2 className="mt-4">Blogs</h2>
+        <h2 className="mt-4">Hidden Destinations</h2>
         <Row className="mb-5">
-          {blogs.map(blog => (
-            <Col key={blog._id} md={4}>
-              <Card data={blog} type="blog" />
+          {destinations.map(destination => (
+            <Col key={destination._id} md={4}>
+              <Card data={destination} type="destination" />
             </Col>
           ))}
         </Row>
@@ -34,4 +34,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default Destinations;
