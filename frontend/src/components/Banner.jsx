@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 
-const Banner = ({ heading, subheading, backgroundImage, images = [], isSlider = false, children, height = "100vh" }) => {
+const Banner = ({
+    heading,
+    subheading,
+    backgroundImage,
+    images = [],
+    isSlider = false,
+    children,
+    height = "100vh",
+    overlayOpacity = 0
+}) => {
     const [offsetY, setOffsetY] = useState(0);
 
     const handleScroll = () => {
@@ -67,6 +76,19 @@ const Banner = ({ heading, subheading, backgroundImage, images = [], isSlider = 
                         textAlign: "center",
                     }}
                 >
+                    {/* Overlay only if overlayOpacity > 0 */}
+                    {overlayOpacity > 0 && (
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})`,
+                            }}
+                        />
+                    )}
                     <Container>
                         <Row>
                             <Col>

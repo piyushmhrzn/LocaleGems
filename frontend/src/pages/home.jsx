@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
+import BlogCard from "../components/BlogCard";
+import EventCard from "../components/EventCard"; //
 import CustomButton from "../components/Button";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -41,8 +43,8 @@ const Home = () => {
           <h2 className="text-center mt-4 mb-4">Featured Cultural Events</h2>
           <Row>
             {events.map(event => (
-              <Col key={event._id} md={4}>
-                <Card data={event} type="event" />
+              <Col key={event._id} md={6}>
+                <EventCard data={event} /> {/* Use EventCard */}
               </Col>
             ))}
           </Row>
@@ -91,8 +93,8 @@ const Home = () => {
           <h2 className="text-center mt-4 mb-4">Blogs</h2>
           <Row>
             {blogs.map(blog => (
-              <Col key={blog._id} md={4}>
-                <Card data={blog} type="blog" />
+              <Col key={blog._id} md={6}>
+                <BlogCard data={blog} /> {/* Use BlogCard */}
               </Col>
             ))}
           </Row>

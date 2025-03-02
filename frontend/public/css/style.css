@@ -82,6 +82,45 @@ body {
     font-size: 1.4rem;
 }
 
+/* Event */
+.event-card-container {
+    width: 100%;
+}
+
+.event-card {
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover .card-img {
+    transform: scale(1.05);
+}
+
+.event-card:hover .overlay {
+    opacity: 1;
+}
+
+.event-card .badge {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.event-card .badge:hover {
+    transform: scale(1.1);
+    background-color: #0056b3;
+}
+
+/* Blog */
+.blog-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.blog-card:hover .overlay {
+    opacity: 1;
+}
+
+.blog-card .card-text {
+    line-height: 1.4;
+}
 
 
 /* @media (max-width: 991px) {
