@@ -6,7 +6,7 @@ import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
 import CustomButton from "../components/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -66,7 +66,9 @@ const Home = () => {
           <Row>
             {destinations.map(destination => (
               <Col key={destination._id} md={4}>
-                <Card data={destination} type="destination" />
+                <Link to={`/destinations/${destination._id}`} style={{ textDecoration: "none" }}>
+                  <Card data={destination} type="destination" />
+                </Link>
               </Col>
             ))}
           </Row>

@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
+import { useNavigate, Link } from "react-router-dom";
 
 const Destinations = () => {
   const { destinations } = useContext(AppContext);
@@ -24,7 +25,9 @@ const Destinations = () => {
         <Row className="mb-5">
           {destinations.map(destination => (
             <Col key={destination._id} md={4}>
-              <Card data={destination} type="destination" />
+              <Link to={`/destinations/${destination._id}`} style={{ textDecoration: "none" }}>
+                <Card data={destination} type="destination" />
+              </Link>
             </Col>
           ))}
         </Row>

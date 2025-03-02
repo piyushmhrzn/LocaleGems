@@ -10,7 +10,6 @@ exports.getDestinations = async (req, res) => {
     try {
         const destinations = await Destination.find();
         const totalDestinations = await Destination.countDocuments();
-
         res.status(200).json({
             success: true,
             message: "Destinations fetched successfully",
@@ -34,15 +33,12 @@ exports.getDestinations = async (req, res) => {
 exports.getDestinationById = async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Validate MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid Destination ID format"
             });
         }
-
         const destination = await Destination.findById(id);
         if (!destination) {
             return res.status(404).json({
@@ -50,7 +46,6 @@ exports.getDestinationById = async (req, res) => {
                 message: "Destination not found"
             });
         }
-
         res.status(200).json({
             success: true,
             message: "Destination fetched successfully",
@@ -72,7 +67,26 @@ exports.getDestinationById = async (req, res) => {
  */
 exports.createDestination = async (req, res) => {
     try {
-        const newDestination = new Destination(req.body);
+        const { name, image, location, coordinates, city, country, short_description, long_description } = req.body;
+
+        // Validate coordinates
+        if (!coordinates || !Array.isArray(coordinates.coordinates) || coordinates.coordinates.length !== 2) {
+            return res.status(400).json({
+                success: false,
+                message: "Coordinates must be an array of [longitude, latitude]"
+            });
+        }
+
+        const newDestination = new Destination({
+            name,
+            image,
+            location,
+            coordinates: { type: "Point", coordinates: coordinates.coordinates }, // Ensure GeoJSON format
+            city,
+            country,
+            short_description,
+            long_description
+        });
         await newDestination.save();
 
         res.status(201).json({
@@ -97,8 +111,8 @@ exports.createDestination = async (req, res) => {
 exports.updateDestination = async (req, res) => {
     try {
         const { id } = req.params;
+        const { coordinates } = req.body;
 
-        // Validate MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
@@ -106,9 +120,17 @@ exports.updateDestination = async (req, res) => {
             });
         }
 
+        // Validate coordinates if provided
+        if (coordinates && (!Array.isArray(coordinates.coordinates) || coordinates.coordinates.length !== 2)) {
+            return res.status(400).json({
+                success: false,
+                message: "Coordinates must be an array of [longitude, latitude]"
+            });
+        }
+
         const updatedDestination = await Destination.findByIdAndUpdate(
             id,
-            req.body,
+            { ...req.body, ...(coordinates && { coordinates: { type: "Point", coordinates: coordinates.coordinates } }) },
             { new: true, runValidators: true }
         );
 
@@ -141,15 +163,12 @@ exports.updateDestination = async (req, res) => {
 exports.deleteDestination = async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Validate MongoDB ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid Destination ID format"
             });
         }
-
         const deletedDestination = await Destination.findByIdAndDelete(id);
         if (!deletedDestination) {
             return res.status(404).json({
@@ -157,7 +176,6 @@ exports.deleteDestination = async (req, res) => {
                 message: "Destination not found"
             });
         }
-
         res.status(200).json({
             success: true,
             message: "Destination deleted successfully",

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container, Form, FormControl, Button } from "react-bootstrap";
+import React, { useState, useEffect, useContext } from "react";
+import { Navbar, Nav, Container, Form, FormControl, Button, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BiSearch, BiUser } from "react-icons/bi";
 import { motion } from "framer-motion";
+import { AppContext } from "../context/AppContext";
 
 const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false); // To toggle search input visibility
+  const { user, setUser, logout } = useContext(AppContext); // Access user from AppContext
 
   const handleScroll = () => {
     setScrolled(window.scrollY > 50);
@@ -19,6 +21,16 @@ const NavBar = () => {
 
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
+  };
+
+  const handleLogout = () => {
+    if (logout) {
+      logout(); // Use context logout if available
+    } else {
+      localStorage.removeItem("authToken");
+      setUser(null);
+      window.location.href = "/"; // Redirect to home
+    }
   };
 
   return (
@@ -143,9 +155,26 @@ const NavBar = () => {
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
             style={{ display: "inline-block" }}
           >
-            <Nav.Link as={Link} to="/login" className="ms-3 text-white">
-              <BiUser size={22} />
-            </Nav.Link>
+            {user ? (
+              <NavDropdown
+                title={`${user.firstname} ${user.lastname}`}
+                id="user-dropdown"
+                className="ms-3 text-white"
+                align="end" // Dropdown aligns to the right
+              >
+                <NavDropdown.Item as={Link} to="/profile">
+                  Profile
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <Nav.Link as={Link} to="/login" className="ms-3 text-white">
+                <BiUser size={22} />
+              </Nav.Link>
+            )}
+
           </motion.div>
 
         </Navbar.Collapse>

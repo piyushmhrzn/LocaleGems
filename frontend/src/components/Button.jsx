@@ -11,6 +11,7 @@ const CustomButton = ({
     onClick,
     disabled = false,
     className = "",
+    type
 }) => {
     return (
         <motion.div
@@ -29,6 +30,7 @@ const CustomButton = ({
                 onClick={onClick}
                 disabled={disabled}
                 className={`${rounded ? "rounded-pill" : ""} ${className}`}
+                type={type}
                 style={{
                     fontWeight: "bold",
                     letterSpacing: "0.5px",

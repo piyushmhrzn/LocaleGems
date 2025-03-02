@@ -13,7 +13,7 @@ const CustomCard = ({ data, type }) => {
 
             <Card.Body className="text-center">
                 <Card.Title className="card-title">{data.title || data.name}</Card.Title>
-                {type === "event" && <Card.Text>{data.location} • {data.date}</Card.Text>}
+                {type === "event" && <Card.Text>{data.location} </Card.Text>}
                 {type === "destination" && <Card.Text>{data.city}, {data.country}</Card.Text>}
                 {type === "blog" && <Card.Text>{data.content}</Card.Text>}
             </Card.Body>

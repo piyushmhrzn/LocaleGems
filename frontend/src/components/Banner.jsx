@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 
-const Banner = ({ heading, subheading, backgroundImage, images = [], isSlider = false, children }) => {
+const Banner = ({ heading, subheading, backgroundImage, images = [], isSlider = false, children, height = "100vh" }) => {
     const [offsetY, setOffsetY] = useState(0);
 
     const handleScroll = () => {
@@ -18,21 +18,21 @@ const Banner = ({ heading, subheading, backgroundImage, images = [], isSlider = 
             style={{
                 position: "relative",
                 width: "100%",
-                height: "100vh",
+                height,
                 overflow: "hidden", // Prevent horizontal scroll
             }}
         >
             {isSlider ? (
                 <Carousel fade interval={5000} controls={false} indicators={false}>
                     {images.map((img, index) => (
-                        <Carousel.Item key={index} style={{ position: "relative", width: "100%", height: "100vh" }}>
+                        <Carousel.Item key={index} style={{ position: "relative", width: "100%", height }}>
                             <div
                                 style={{
                                     backgroundImage: `url(${img})`,
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
                                     width: "100%",
-                                    height: "100vh",
+                                    height,
                                     position: "absolute",
                                     top: 0,
                                     left: 0,
@@ -59,7 +59,7 @@ const Banner = ({ heading, subheading, backgroundImage, images = [], isSlider = 
                         backgroundSize: "cover",
                         backgroundPosition: `center ${offsetY}px`,
                         width: "100%",
-                        height: "100vh",
+                        height,
                         color: "white",
                         display: "flex",
                         alignItems: "center",

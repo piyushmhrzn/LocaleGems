@@ -10,7 +10,7 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON request bodies
 
 // Getting the port from .env file
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 
 // ✅ Import all route files
 const UserRoutes = require('./routes/userRoutes');
@@ -18,13 +18,15 @@ const DestinationRoutes = require('./routes/destinationRoutes');
 const EventRoutes = require('./routes/eventRoutes');
 const LocalBusinessRoutes = require('./routes/localBusinessRoutes');
 const BlogRoutes = require('./routes/blogRoutes');
+const AuthRoutes = require('./routes/authRoutes'); // Import the auth routes
 
 // ✅ Register route middlewares with their respective endpoints
-app.use('/api/users', UserRoutes); 
+app.use('/api/users', UserRoutes);
 app.use('/api/destinations', DestinationRoutes);
 app.use('/api/events', EventRoutes);
-app.use('/api/businesses', LocalBusinessRoutes); 
-app.use('/api/blogs', BlogRoutes); 
+app.use('/api/businesses', LocalBusinessRoutes);
+app.use('/api/blogs', BlogRoutes);
+app.use('/api/auth', AuthRoutes); // Auth routes
 
 // ✅ Default root route
 app.get('/', (req, res) => {

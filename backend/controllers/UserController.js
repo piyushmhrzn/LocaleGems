@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/User'); // Import User model
+const authMiddleware = require('../middleware/authMiddleware'); // Import auth middleware
 
 /**
  * @desc    Get all users
@@ -65,7 +66,7 @@ const createUser = async (req, res) => {
 /**
  * @desc    Get a single user by ID
  * @route   GET /api/users/:id
- * @access  Public
+ * @access  Private
  */
 const getUserById = async (req, res) => {
     try {
@@ -104,33 +105,32 @@ const getUserById = async (req, res) => {
 /**
  * @desc    Update a user
  * @route   PUT /api/users/:id
- * @access  Public
+ * @access  Private (authenticated user only)
  */
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const { firstname, lastname, email, password, role } = req.body;
+        const { firstname, lastname, email, phone, address, city, country } = req.body;
 
-        // Validate the MongoDB ObjectId format
+        // Validate ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid User ID format"
-            });
+            return res.status(400).json({ success: false, message: "Invalid User ID format" });
         }
 
-        // Find user by ID and update
+        // Ensure the user can only update their own profile
+        if (req.user !== id) {
+            return res.status(403).json({ success: false, message: "Unauthorized to update this profile" });
+        }
+
+        // Update user
         const updatedUser = await User.findByIdAndUpdate(
             id,
-            { firstname, lastname, email, password, role },
+            { firstname, lastname, email, phone, address, city, country },
             { new: true, runValidators: true }
         );
 
         if (!updatedUser) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
+            return res.status(404).json({ success: false, message: "User not found" });
         }
 
         res.status(200).json({
@@ -139,6 +139,9 @@ const updateUser = async (req, res) => {
             data: updatedUser
         });
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ success: false, message: "Email already exists" });
+        }
         res.status(500).json({
             success: false,
             message: "Server error",
@@ -150,7 +153,7 @@ const updateUser = async (req, res) => {
 /**
  * @desc    Delete a user
  * @route   DELETE /api/users/:id
- * @access  Public
+ * @access  Private
  */
 const deleteUser = async (req, res) => {
     try {
@@ -160,6 +163,12 @@ const deleteUser = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Invalid User ID format"
+            });
+        }
+        if (req.user !== id) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized to delete this profile"
             });
         }
 
@@ -185,4 +194,10 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { createUser, getUsers, getUserById, updateUser, deleteUser };
+module.exports = {
+    getUsers, // Left public for now; adding authMiddleware if needed
+    createUser, // Left public for now; adding authMiddleware if needed
+    getUserById: [authMiddleware, getUserById],
+    updateUser: [authMiddleware, updateUser],
+    deleteUser: [authMiddleware, deleteUser]
+};
