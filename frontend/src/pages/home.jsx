@@ -44,7 +44,9 @@ const Home = () => {
           <Row>
             {events.map(event => (
               <Col key={event._id} md={6}>
-                <EventCard data={event} /> {/* Use EventCard */}
+                <Link to={`/events/${event._id}`} style={{ textDecoration: "none" }}>
+                  <EventCard data={event} /> {/* Use EventCard */}
+                </Link>
               </Col>
             ))}
           </Row>

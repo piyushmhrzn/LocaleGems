@@ -9,6 +9,7 @@ import Contact from "./pages/contact.jsx";
 import Login from "./pages/login.jsx";
 import Profile from "./pages/profile.jsx";
 import DestinationDetail from "./pages/destinationDetail.jsx";
+import EventDetail from "./pages/eventDetail.jsx";    
 import { AppProvider } from "./context/AppContext.jsx";
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/destinations" element={<Destinations />} />
           <Route path="/destinations/:id" element={<DestinationDetail />} />
           <Route path="/blogs" element={<Blogs />} />

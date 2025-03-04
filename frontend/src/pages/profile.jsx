@@ -65,7 +65,7 @@ const Profile = () => {
                 heading={`Welcome, ${user.firstname} ${user.lastname}`}
                 subheading="Manage your profile and explore your journey with LocaleGems"
                 backgroundImage="/images/profile-banner.jpg"
-                height="40vh"
+                height="50vh"
             />
 
             <Container className="my-5">

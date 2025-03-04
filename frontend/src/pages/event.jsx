@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
+import { useNavigate, Link } from "react-router-dom";
 
 const Events = () => {
     const { events } = useContext(AppContext);
@@ -24,7 +25,9 @@ const Events = () => {
                 <Row className="mb-5">
                     {events.map(event => (
                         <Col key={event._id} md={4}>
-                            <Card data={event} type="event" />
+                            <Link to={`/events/${event._id}`} style={{ textDecoration: "none" }}>
+                                <Card data={event} type="event" />
+                            </Link>
                         </Col>
                     ))}
                 </Row>

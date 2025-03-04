@@ -72,25 +72,25 @@ const EventCard = ({ data }) => {
                         >
                             <Card.Title
                                 className="fw-bold mb-3"
-                                style={{ fontSize: "2rem", color: "#007bff" }}
+                                style={{ fontSize: "1.7rem", color: "#333333" }}
                             >
                                 {data.name}
                             </Card.Title>
                             <Card.Text
                                 className="mb-3"
-                                style={{ fontSize: "1.2rem", color: "#343a40" }}
+                                style={{ fontSize: "1.1rem", color: "#343a40" }}
                             >
                                 {data.location}
                             </Card.Text>
                             <Card.Text
                                 className="text-muted"
-                                style={{ fontSize: "1rem", lineHeight: "1.5" }}
+                                style={{ fontSize: "0.8rem", lineHeight: "1.5" }}
                             >
                                 {data.description?.slice(0, 150) || "Join us for an unforgettable experience!"}...
                             </Card.Text>
                             <div className="mt-3">
                                 <span
-                                    className="badge bg-primary text-white px-4 py-2"
+                                    className="badge bg-dark text-white px-4 py-2"
                                     style={{ fontSize: "1rem", cursor: "pointer" }}
                                 >
                                     Learn More
