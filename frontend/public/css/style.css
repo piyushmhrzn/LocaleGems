@@ -121,8 +121,18 @@ body {
 .blog-card .card-text {
     line-height: 1.4;
 }
+.bg-nav {
+    background: #024e91;
+  }
+  .card-title.h5 {
+    color: #024e91!important;
+  }
 
-
+  button.btn.learnmore {
+    background: #024e91;
+    padding: 10px 20px!important;
+    border-radius: 5px!important;
+}
 /* @media (max-width: 991px) {
     .navbar {
         background-color: #343a40 !important;

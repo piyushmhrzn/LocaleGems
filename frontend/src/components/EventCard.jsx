@@ -89,12 +89,10 @@ const EventCard = ({ data }) => {
                                 {data.description?.slice(0, 150) || "Join us for an unforgettable experience!"}...
                             </Card.Text>
                             <div className="mt-3">
-                                <span
-                                    className="badge bg-dark text-white px-4 py-2"
-                                    style={{ fontSize: "1rem", cursor: "pointer" }}
-                                >
-                                    Learn More
-                                </span>
+                                <button  className="badge btn learnmore text-white px-4 py-2"  style={{ fontSize: "1rem", cursor: "pointer" }}>
+                                Learn More
+                                </button>
+                            
                             </div>
                         </Card.Body>
                     </Col>

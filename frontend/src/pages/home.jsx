@@ -39,7 +39,7 @@ const Home = () => {
 
       <Container>
         {/* Events Cards */}
-        <Row className="mb-5">
+        <Row className="my-5">
           <h2 className="text-center mt-4 mb-4">Featured Cultural Events</h2>
           <Row>
             {events.map(event => (
@@ -51,12 +51,11 @@ const Home = () => {
             ))}
           </Row>
           {/* View More Button */}
-          <div className="text-center mt-3">
+          <div className="viewmore text-center mt-3">
             <CustomButton
               label="View More Events"
               variant="dark"
               size="md"
-              rounded="true"
               onClick={() => navigate("/events")} // Navigate to Events page
             />
           </div>
@@ -77,12 +76,11 @@ const Home = () => {
             ))}
           </Row>
           {/* View More Button */}
-          <div className="text-center mt-3">
+          <div className="viewmore text-center mt-3">
             <CustomButton
               label="View More Destinations"
               variant="dark"
               size="md"
-              rounded="true"
               onClick={() => navigate("/destinations")} // Navigate to Destinations page
             />
           </div>
@@ -101,12 +99,11 @@ const Home = () => {
             ))}
           </Row>
           {/* View More Button */}
-          <div className="text-center mt-3">
+          <div className=" viewmore text-center mt-3">
             <CustomButton
               label="View More Blogs"
               variant="dark"
               size="md"
-              rounded="true"
               onClick={() => navigate("/blogs")} // Navigate to blogs page
             />
           </div>

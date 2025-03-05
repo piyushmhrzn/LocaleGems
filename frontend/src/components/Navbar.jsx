@@ -36,7 +36,7 @@ const NavBar = () => {
   return (
     <Navbar
       expand="lg"
-      className={`fixed-top ${scrolled ? "bg-dark shadow-lg" : ""}`} // Remove transparent bg on scroll
+      className={`fixed-top ${scrolled ? "bg-nav shadow-lg" : ""}`} // Remove transparent bg on scroll
       style={{
         transition: "0.3s",
         backdropFilter: scrolled ? "blur(10px)" : "none",

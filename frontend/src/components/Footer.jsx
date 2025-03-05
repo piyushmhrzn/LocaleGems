@@ -5,9 +5,9 @@ import CustomButton from "./Button.jsx";
 
 const Footer = () => {
     return (
-        <footer className="text-white">
+        <footer className="text-dark">
             {/* Newsletter Section */}
-            <div className="py-5" style={{ backgroundColor: "#1a1a1a" }}>
+            <div className="py-5" style={{ backgroundColor: "#f4e5e8" }}>
                 <Container>
                     <Row className="text-center">
                         <Col>
@@ -33,7 +33,7 @@ const Footer = () => {
             </div>
 
             {/* Main Footer Content */}
-            <div className="py-5" style={{ backgroundColor: "#111" }}>
+            <div className="py-5" style={{ backgroundColor: "#f4e5e8" }}>
                 <Container>
                     <Row className="text-center text-md-start">
 
@@ -44,10 +44,10 @@ const Footer = () => {
 
                             {/* Social Media Icons */}
                             <div className="d-flex justify-content-center justify-content-md-start gap-3 mt-3">
-                                <a href="#" className="text-white fs-5"><FaFacebookF /></a>
-                                <a href="#" className="text-white fs-5"><FaTwitter /></a>
-                                <a href="#" className="text-white fs-5"><FaInstagram /></a>
-                                <a href="#" className="text-white fs-5"><FaLinkedinIn /></a>
+                                <a href="#" className="text-dark fs-5"><FaFacebookF /></a>
+                                <a href="#" className="text-dark fs-5"><FaTwitter /></a>
+                                <a href="#" className="text-dark fs-5"><FaInstagram /></a>
+                                <a href="#" className="text-dark fs-5"><FaLinkedinIn /></a>
                             </div>
                         </Col>
 
@@ -55,11 +55,11 @@ const Footer = () => {
                         <Col md={4} className="mb-4">
                             <h5 className=" mb-3">Quick Links</h5>
                             <ul className="list-unstyled">
-                                <li><a href="/events" className="text-white text-decoration-none">Events</a></li>
-                                <li><a href="/destinations" className="text-white text-decoration-none">Destinations</a></li>
-                                <li><a href="/blogs" className="text-white text-decoration-none">Blogs</a></li>
-                                <li><a href="/about" className="text-white text-decoration-none">About Us</a></li>
-                                <li><a href="/contact" className="text-white text-decoration-none">Contact</a></li>
+                                <li><a href="/events" className="text-dark text-decoration-none">Events</a></li>
+                                <li><a href="/destinations" className="text-dark text-decoration-none">Destinations</a></li>
+                                <li><a href="/blogs" className="text-dark text-decoration-none">Blogs</a></li>
+                                <li><a href="/about" className="text-dark text-decoration-none">About Us</a></li>
+                                <li><a href="/contact" className="text-dark text-decoration-none">Contact</a></li>
                             </ul>
                         </Col>
 
@@ -76,9 +76,9 @@ const Footer = () => {
             </div>
 
             {/* Copyright Section */}
-            <div className="py-3 text-center" style={{ backgroundColor: "#000" }}>
+            <div className="py-3 text-center" style={{ backgroundColor: "rgb(2 78 145)" }}>
                 <Container>
-                    <p className="mb-0 fw-light">&copy; {new Date().getFullYear()} LocaleGems. All Rights Reserved.</p>
+                    <p className=" text-white mb-0 fw-light">&copy; {new Date().getFullYear()} LocaleGems. All Rights Reserved.</p>
                 </Container>
             </div>
         </footer>
