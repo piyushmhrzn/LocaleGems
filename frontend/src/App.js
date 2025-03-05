@@ -10,6 +10,8 @@ import Login from "./pages/login.jsx";
 import Profile from "./pages/profile.jsx";
 import DestinationDetail from "./pages/destinationDetail.jsx";
 import EventDetail from "./pages/eventDetail.jsx";    
+import BusinessRegistrationForm from "./pages/BusinessRegistrationForm";
+
 import { AppProvider } from "./context/AppContext.jsx";
 
 const App = () => {
@@ -23,6 +25,7 @@ const App = () => {
           <Route path="/destinations" element={<Destinations />} />
           <Route path="/destinations/:id" element={<DestinationDetail />} />
           <Route path="/blogs" element={<Blogs />} />
+          <Route path="/BusinessRegistrationForm" element={<BusinessRegistrationForm />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
