@@ -52,7 +52,7 @@ const Banner = ({
                             <Container className="h-100 d-flex align-items-center justify-content-center text-white position-relative">
                                 <Row>
                                     <Col className="text-center">
-                                        <h1 className="display-3 fw-bold">{heading}</h1>
+                                        <h1 className="display-4 fw-bold">{heading}</h1>
                                         <p className="lead">{subheading}</p>
                                         {children}
                                     </Col>

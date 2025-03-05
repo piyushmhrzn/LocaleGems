@@ -32,7 +32,6 @@ const CustomButton = ({
                 className={`${rounded ? "rounded-pill" : ""} ${className}`}
                 type={type}
                 style={{
-                    fontWeight: "bold",
                     letterSpacing: "0.5px",
                     padding: "0.75rem 1.5rem",
                     textTransform: "capitalize",

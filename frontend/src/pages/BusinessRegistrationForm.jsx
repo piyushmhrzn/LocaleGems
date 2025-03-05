@@ -133,7 +133,7 @@ const BusinessRegistrationForm  = () => {
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" className="mb-5 w-100">
+                        <Button  type="submit" className="btn-main mb-5 w-100">
                             Register Business
                         </Button>
                     </Form>

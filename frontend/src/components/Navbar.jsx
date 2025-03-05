@@ -121,7 +121,23 @@ const NavBar = () => {
                 Contact
               </Nav.Link>
             </motion.div>
+
+            {/* business registration */}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              style={{ display: "inline-block" }}
+            >
+              <Nav.Link as={Link} to="/BusinessRegistrationForm" className="text-white ms-3">
+                Register Business
+              </Nav.Link>
+            </motion.div>
           </Nav>
+
+      
+
+
 
           {/* Search Input Toggle */}
           <div className="d-flex ms-3 align-items-center">

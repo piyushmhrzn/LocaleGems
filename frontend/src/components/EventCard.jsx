@@ -12,7 +12,7 @@ const EventCard = ({ data }) => {
             style={{ width: "100%", marginBottom: "20px" }}
         >
             <Card
-                className="event-card shadow-lg"
+                className="event-card"
                 style={{
                     borderRadius: "20px",
                     overflow: "hidden",
@@ -63,7 +63,7 @@ const EventCard = ({ data }) => {
                         <Card.Body
                             className="p-4"
                             style={{
-                                background: "linear-gradient(135deg, #f8f9fa, #e9ecef)", // Subtle gradient
+                                background: "#f8f8f8", // Subtle gradient
                                 height: "100%",
                                 display: "flex",
                                 flexDirection: "column",

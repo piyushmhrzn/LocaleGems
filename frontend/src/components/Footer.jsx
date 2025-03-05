@@ -7,7 +7,7 @@ const Footer = () => {
     return (
         <footer className="text-dark">
             {/* Newsletter Section */}
-            <div className="py-5" style={{ backgroundColor: "#f4e5e8" }}>
+            <div className="py-5" style={{ backgroundColor: "#f8f8f8" }}>
                 <Container>
                     <Row className="text-center">
                         <Col>
@@ -33,7 +33,7 @@ const Footer = () => {
             </div>
 
             {/* Main Footer Content */}
-            <div className="py-5" style={{ backgroundColor: "#f4e5e8" }}>
+            <div className="py-5" style={{ backgroundColor: "#f8f8f8" }}>
                 <Container>
                     <Row className="text-center text-md-start">
 
@@ -76,7 +76,7 @@ const Footer = () => {
             </div>
 
             {/* Copyright Section */}
-            <div className="py-3 text-center" style={{ backgroundColor: "rgb(2 78 145)" }}>
+            <div className="py-3 text-center" style={{ backgroundColor: "#162F65" }}>
                 <Container>
                     <p className=" text-white mb-0 fw-light">&copy; {new Date().getFullYear()} LocaleGems. All Rights Reserved.</p>
                 </Container>

@@ -54,7 +54,7 @@ const Home = () => {
           <div className="viewmore text-center mt-3">
             <CustomButton
               label="View More Events"
-              variant="dark"
+              variant="light"
               size="md"
               onClick={() => navigate("/events")} // Navigate to Events page
             />

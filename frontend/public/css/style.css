@@ -104,8 +104,10 @@ body {
 }
 
 .event-card .badge:hover {
-    transform: scale(1.1);
-    background-color: #0056b3;
+    background-color: transparent;
+    border: 1px solid #ffc107;
+    color: #ffc107 !important;
+    font-weight: initial;
 }
 
 /* Blog */
@@ -125,7 +127,7 @@ body {
     background: #ffc107;
   }
   .card-title.h5 {
-    color: #6e0202 !important;
+    color: #162F65!important;
   }
 
   button.btn.learnmore {
