@@ -8,12 +8,21 @@ const Destination = require('../models/Destination');
  */
 exports.getDestinations = async (req, res) => {
     try {
-        const destinations = await Destination.find();
+        let { page = 1, limit = 3 } = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
+
         const totalDestinations = await Destination.countDocuments();
+        const destinations = await Destination.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
+
         res.status(200).json({
             success: true,
             message: "Destinations fetched successfully",
             total: totalDestinations,
+            page,
+            totalPages: Math.ceil(totalDestinations / limit),
             data: destinations
         });
     } catch (error) {
@@ -24,6 +33,7 @@ exports.getDestinations = async (req, res) => {
         });
     }
 };
+
 
 /**
  * @desc    Get a single destination by ID

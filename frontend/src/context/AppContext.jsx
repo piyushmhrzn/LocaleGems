@@ -6,7 +6,10 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [events, setEvents] = useState([]);
+    const [businesses, setBusinesses] = useState([]);
     const [destinations, setDestinations] = useState([]);
+    const [totalDestinationPages, setTotalDestinationPages] = useState(1);
+    const [currentDestinationPage, setCurrentDestinationPage] = useState(1);
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -25,6 +28,20 @@ export const AppProvider = ({ children }) => {
             setBlogs(blogsRes.data.data);
         } catch (err) {
             console.error("Error fetching data:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchDestinations = async (page = 1) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${baseURL}/destinations?page=${page}&limit=3`);
+            setDestinations(response.data.data);
+            setTotalDestinationPages(response.data.totalPages);
+            setCurrentDestinationPage(page);
+        } catch (err) {
+            console.error("Error fetching destinations:", err);
         } finally {
             setLoading(false);
         }
@@ -63,13 +80,41 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    const fetchBusinesses = async (filters = {}) => {
+        setLoading(true);
+        try {
+            const queryParams = new URLSearchParams(filters).toString();
+            const response = await axios.get(`${baseURL}/businesses?${queryParams}`);
+            setBusinesses(response.data.data);
+        } catch (error) {
+            console.error("Error fetching filtered businesses:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem("authToken");
         setUser(null);
     };
 
     return (
-        <AppContext.Provider value={{ events, destinations, blogs, user, setUser, logout, loading, fetchEvents }}>
+        <AppContext.Provider
+            value={{
+                events,
+                businesses,
+                destinations,
+                totalDestinationPages,
+                currentDestinationPage,
+                fetchDestinations,
+                blogs,
+                user,
+                setUser,
+                logout,
+                loading,
+                fetchEvents,
+                fetchBusinesses
+            }}>
             {children}
         </AppContext.Provider>
     );
