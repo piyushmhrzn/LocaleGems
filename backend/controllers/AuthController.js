@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -81,6 +82,72 @@ const loginUser = async (req, res) => {
     }
 };
 
+
+/**
+ * @desc    Admin login
+ * @route   POST /api/auth/admin-login
+ * @access  Public
+ */
+const adminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and password are required",
+            });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials",
+            });
+        }
+
+        // Check if user is admin
+        if (user.role !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: "Admin access required",
+            });
+        }
+
+        // Verify password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials",
+            });
+        }
+
+        // Generate JWT
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Admin logged in successfully",
+            token,
+        });
+    } catch (error) {
+        console.error("Error in adminLogin:", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
+
 /**
  * @desc    Logout user
  * @route   POST /api/auth/logout
@@ -101,4 +168,9 @@ const logoutUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, logoutUser };
+module.exports = {
+    registerUser,
+    loginUser,
+    adminLogin,
+    logoutUser
+};
