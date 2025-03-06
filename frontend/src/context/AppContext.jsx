@@ -96,6 +96,7 @@ export const AppProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem("authToken");
         setUser(null);
+        window.location.href = "/login";
     };
 
     return (

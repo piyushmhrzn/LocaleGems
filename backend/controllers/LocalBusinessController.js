@@ -100,14 +100,18 @@ const createBusiness = async (req, res) => {
 };
 
 /**
- * @desc    Get all businesses
+ * @desc    Get businesses for the authenticated user
  * @route   GET /api/businesses
- * @access  Public
+ * @access  Private (authenticated users only)
  */
 const getBusinesses = async (req, res) => {
     try {
-        const businesses = await Business.find().populate('destination_id', 'name city country');
-        const totalBusinesses = await Business.countDocuments();
+        // Get user_id from authenticated user (set by authMiddleware)
+        const userId = req.user; // From JWT payload via authMiddleware
+        const filter = { user_id: userId }; //  Only fetch businesses owned by this user
+
+        const businesses = await Business.find(filter).populate('destination_id', 'name city country');
+        const totalBusinesses = await Business.countDocuments(filter);
 
         res.status(200).json({
             success: true,
@@ -279,7 +283,7 @@ const deleteBusiness = async (req, res) => {
 
 module.exports = {
     createBusiness,
-    getBusinesses,
+    getBusinesses: [authMiddleware, getBusinesses],
     getBusinessById,
     updateBusiness: [authMiddleware, updateBusiness],
     deleteBusiness: [authMiddleware, deleteBusiness],

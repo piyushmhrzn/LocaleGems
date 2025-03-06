@@ -10,6 +10,7 @@ import Login from "./pages/login";
 import Profile from "./pages/Profile";
 import DestinationDetail from "./pages/destinationDetail.jsx";
 import BusinessRegistrationForm from "./pages/BusinessRegistrationForm.jsx";
+import BusinessInfo from "./pages/businessInfo.jsx";
 import AdminPanel from "./pages/adminpanel.jsx";
 import AdminLogin from "./pages/adminlogin.jsx";
 import { AppProvider } from "./context/AppContext";
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/BusinessRegistrationForm" element={<BusinessRegistrationForm />} />
+          <Route path="/BusinessInfo" element={<BusinessInfo />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPanel />} />} />
           <Route path="*" element={<Home />} />

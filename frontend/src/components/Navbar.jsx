@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import { BiSearch, BiUser } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { AppContext } from "../context/AppContext";
+import axios from "axios";
 
 const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false); // To toggle search input visibility
   const { user, setUser, logout } = useContext(AppContext); // Access user from AppContext
+  const [hasBusiness, setHasBusiness] = useState(false); // Check if user has a business
 
   const handleScroll = () => {
     setScrolled(window.scrollY > 50);
@@ -18,6 +20,29 @@ const NavBar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+
+  useEffect(() => {
+    const checkBusinessOwnership = async () => {
+      if (user && user.role === "owner") {
+        try {
+          const token = localStorage.getItem("authToken");
+          const response = await axios.get("http://localhost:3000/api/businesses", {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { user_id: user._id },
+          });
+          setHasBusiness(response.data.data.length > 0);
+        } catch (error) {
+          console.error("Error checking business ownership:", error);
+          setHasBusiness(false);
+        }
+      } else {
+        setHasBusiness(false); // Reset if not an owner
+      }
+    };
+    checkBusinessOwnership();
+  }, [user]);
+
 
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
@@ -29,7 +54,7 @@ const NavBar = () => {
     } else {
       localStorage.removeItem("authToken");
       setUser(null);
-      window.location.href = "/"; // Redirect to home
+      window.location.href = "/login"; // Redirect to login page
     }
   };
 
@@ -122,21 +147,32 @@ const NavBar = () => {
               </Nav.Link>
             </motion.div>
 
-            {/* business registration */}
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 200, damping: 10 }}
-              style={{ display: "inline-block" }}
-            >
-              <Nav.Link as={Link} to="/BusinessRegistrationForm" className="text-white ms-3">
-                Register Business
-              </Nav.Link>
-            </motion.div>
+            {/* Conditional Business Link */}
+            {(!user || (user.role === "owner" && !hasBusiness)) && (
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                style={{ display: "inline-block" }}
+              >
+                <Nav.Link as={Link} to="/BusinessRegistrationForm" className="text-white ms-3">
+                  Register Business
+                </Nav.Link>
+              </motion.div>
+            )}
+            {user && user.role === "owner" && hasBusiness && (
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                style={{ display: "inline-block" }}
+              >
+                <Nav.Link as={Link} to="/BusinessInfo" className="text-white ms-3">
+                  Business Info
+                </Nav.Link>
+              </motion.div>
+            )}
           </Nav>
-
-      
-
 
 
           {/* Search Input Toggle */}
