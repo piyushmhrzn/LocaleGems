@@ -27,7 +27,7 @@ const DestinationDetail = () => {
                 setDestination(destinationRes.data.data);
 
                 // Fetch All Businesses
-                const businessRes = await axios.get(`http://localhost:3000/api/businesses`);
+                const businessRes = await axios.get(`http://localhost:3000/api/businesses/all`);
                 const allBusinesses = businessRes.data.data;
 
                 // Fetch All Events

@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Banner from "../components/Banner"; // Import Banner
-import { Container, Row, Col, Badge, Card, Carousel, ListGroup } from "react-bootstrap";
+import Banner from "../components/Banner";
+import { Container, Row, Col, Badge, Card, Carousel } from "react-bootstrap";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import CustomButton from "../components/Button";
 import Countdown from "react-countdown";
@@ -17,7 +17,6 @@ const EventDetail = () => {
     const navigate = useNavigate();
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [attendees, setAttendees] = useState([]);
     const [relatedEvents, setRelatedEvents] = useState([]);
 
     useEffect(() => {
@@ -27,7 +26,6 @@ const EventDetail = () => {
                 setEvent(response.data.data);
                 setLoading(false);
                 fetchRelatedEvents(response.data.data.destination_id);
-                fetchAttendees(id);
             } catch (error) {
                 console.error("Error fetching event:", error);
                 setLoading(false);
@@ -37,18 +35,9 @@ const EventDetail = () => {
         const fetchRelatedEvents = async (destination_id) => {
             try {
                 const response = await axios.get(`http://localhost:3000/api/events?destination_id=${destination_id}`);
-                setRelatedEvents(response.data.data);
+                setRelatedEvents(response.data.data.filter(e => e._id !== id)); // Exclude current event
             } catch (error) {
                 console.error("Error fetching related events:", error);
-            }
-        };
-
-        const fetchAttendees = async (eventId) => {
-            try {
-                const response = await axios.get(`http://localhost:3000/api/events/${eventId}/attendees`);
-                setAttendees(response.data.data);
-            } catch (error) {
-                console.error("Error fetching attendees:", error);
             }
         };
 
@@ -60,9 +49,13 @@ const EventDetail = () => {
 
     const eventDate = moment(event.date).format("MMMM Do YYYY, h:mm A");
 
+    // Parse location for map coordinates with fallback
+    const locationParts = event.location.split(",");
+    const lat = parseFloat(locationParts[0]);
+    const lng = parseFloat(locationParts[1]);
     const center = {
-        lat: parseFloat(event.location.split(",")[0]),
-        lng: parseFloat(event.location.split(",")[1]),
+        lat: isNaN(lat) ? 0 : lat, // Fallback to 0 if invalid
+        lng: isNaN(lng) ? 0 : lng, // Fallback to 0 if invalid
     };
 
     return (
@@ -81,7 +74,11 @@ const EventDetail = () => {
                     <Col md={6}>
                         <Carousel>
                             <Carousel.Item>
-                                <img className="d-block w-100" src={event.image || "https://via.placeholder.com/600x300"} alt={event.name} />
+                                <img
+                                    className="d-block w-100"
+                                    src={event.image || "https://via.placeholder.com/600x300"}
+                                    alt={event.name}
+                                />
                             </Carousel.Item>
                         </Carousel>
                     </Col>
@@ -89,6 +86,7 @@ const EventDetail = () => {
                         <h2 className="fw-bold" style={{ color: "#333333" }}>{event.name}</h2>
                         <p><strong>Date:</strong> {eventDate}</p>
                         <p><strong>Location:</strong> {event.location}</p>
+                        <p><strong>Organizer:</strong> {event.user_id?.firstname} {event.user_id?.lastname}</p>
                         <Badge bg="success" className="mb-3">Upcoming Event</Badge>
                         <h5 className="mt-4">Countdown to Event:</h5>
                         <Countdown
@@ -100,7 +98,6 @@ const EventDetail = () => {
                                 </h4>
                             )}
                         />
-
                         <div className="mt-4">
                             <CustomButton
                                 label="Back to Events"
@@ -108,7 +105,8 @@ const EventDetail = () => {
                                 size="md"
                                 rounded="true"
                                 className="text-white"
-                                onClick={() => navigate("/events")} />
+                                onClick={() => navigate("/events")}
+                            />
                         </div>
                     </Col>
                 </Row>
@@ -121,14 +119,6 @@ const EventDetail = () => {
                                 <Marker position={center} label={event.name} />
                             </GoogleMap>
                         </LoadScript>
-                    </Col>
-                    <Col md={6}>
-                        <h3 className="fw-bold text-primary">Attendees</h3>
-                        <ListGroup>
-                            {attendees.length > 0 ? attendees.map((attendee) => (
-                                <ListGroup.Item key={attendee._id}>{attendee.name}</ListGroup.Item>
-                            )) : <p>No attendees yet.</p>}
-                        </ListGroup>
                     </Col>
                 </Row>
 
@@ -144,7 +134,12 @@ const EventDetail = () => {
                                         <Card.Text>
                                             <strong>Date:</strong> {moment(related.date).format("MMMM Do YYYY, h:mm A")}
                                         </Card.Text>
-                                        <CustomButton label="View Details" variant="dark" size="md" onClick={() => navigate(`/events/${related._id}`)} />
+                                        <CustomButton
+                                            label="View Details"
+                                            variant="dark"
+                                            size="md"
+                                            onClick={() => navigate(`/events/${related._id}`)}
+                                        />
                                     </Card.Body>
                                 </Card>
                             </Col>

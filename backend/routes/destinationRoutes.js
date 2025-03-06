@@ -1,14 +1,21 @@
 const express = require('express');
-const { getDestinations, getDestinationById, createDestination, updateDestination, deleteDestination } = require('../controllers/DestinationController');
+const { getDestinations, getAllDestinations, getDestinationById, createDestination, updateDestination, deleteDestination } = require('../controllers/DestinationController');
 
 const router = express.Router();
 
 /**
  * @route   GET /api/destinations
- * @desc    Fetch all destinations
+ * @desc    Fetch all destinations by page
  * @access  Public
  */
 router.get('/', getDestinations);
+
+/**
+ * @route   GET /api/destinations
+ * @desc    Fetch all destinations 
+ * @access  Private (admin only)
+ */
+router.get('/all', getAllDestinations); // Admin-specific
 
 /**
  * @route   GET /api/destinations/:id

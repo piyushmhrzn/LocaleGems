@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const Destination = require('../models/Destination');
+const authMiddleware = require('../middleware/authMiddleware'); // Import middleware
 
 /**
- * @desc    Get all destinations
+ * @desc    Get destinations by limit and page
  * @route   GET /api/destinations
  * @access  Public
  */
@@ -30,6 +31,31 @@ exports.getDestinations = async (req, res) => {
             success: false,
             message: "Server error",
             error: error.message
+        });
+    }
+};
+
+/**
+ * @desc    Get all destinations (admin only)
+ * @route   GET /api/destinations/all
+ * @access  Private (admin only)
+ */
+exports.getAllDestinations = async (req, res) => {
+    try {
+        const destinations = await Destination.find();
+        const totalDestinations = await Destination.countDocuments();
+
+        res.status(200).json({
+            success: true,
+            message: "All destinations fetched successfully",
+            total: totalDestinations,
+            data: destinations,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
         });
     }
 };
@@ -198,4 +224,13 @@ exports.deleteDestination = async (req, res) => {
             error: error.message
         });
     }
+};
+
+module.exports = {
+    getDestinations: exports.getDestinations,
+    getAllDestinations: [authMiddleware, exports.getAllDestinations], // Admin-specific
+    getDestinationById: exports.getDestinationById,
+    createDestination: exports.createDestination,
+    updateDestination: [authMiddleware, exports.updateDestination],
+    deleteDestination: [authMiddleware, exports.deleteDestination],
 };

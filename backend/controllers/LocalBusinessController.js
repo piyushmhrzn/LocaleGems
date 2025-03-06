@@ -128,6 +128,33 @@ const getBusinesses = async (req, res) => {
     }
 };
 
+
+/**
+ * @desc    Get all businesses (admin only)
+ * @route   GET /api/businesses/all
+ * @access  Private (admin only)
+ */
+const getAllBusinesses = async (req, res) => {
+    try {
+        const businesses = await Business.find().populate('destination_id', 'name city country');
+        const totalBusinesses = await Business.countDocuments();
+
+        res.status(200).json({
+            success: true,
+            message: "All businesses fetched successfully",
+            total: totalBusinesses,
+            data: businesses,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
 /**
  * @desc    Get a single business by ID
  * @route   GET /api/businesses/:id
@@ -281,10 +308,65 @@ const deleteBusiness = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Update business status (admin only)
+ * @route   PUT /api/businesses/:id/status
+ * @access  Private (admin only)
+ */
+const updateBusinessStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Business ID format",
+            });
+        }
+
+        if (!['pending', 'approved', 'rejected'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid status value. Must be 'pending', 'approved', or 'rejected'",
+            });
+        }
+
+        const updatedBusiness = await Business.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedBusiness) {
+            return res.status(404).json({
+                success: false,
+                message: "Business not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Business status updated successfully",
+            data: updatedBusiness,
+        });
+    } catch (error) {
+        console.error("Error in updateBusinessStatus:", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
 module.exports = {
     createBusiness,
     getBusinesses: [authMiddleware, getBusinesses],
+    getAllBusinesses,
     getBusinessById,
     updateBusiness: [authMiddleware, updateBusiness],
+    updateBusinessStatus: [authMiddleware, updateBusinessStatus],
     deleteBusiness: [authMiddleware, deleteBusiness],
 };

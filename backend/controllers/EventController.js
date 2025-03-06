@@ -6,7 +6,7 @@ const Event = require('../models/Event');
  * @route   GET /api/events
  * @access  Public
  */
-exports.getEvents = async (req, res) => {
+const getEvents = async (req, res) => {
     try {
         let { search, location } = req.query;
         let filter = {};
@@ -55,50 +55,52 @@ exports.getEvents = async (req, res) => {
     }
 };
 
+
 /**
  * @desc    Get a single event by ID
  * @route   GET /api/events/:id
  * @access  Public
  */
-exports.getEventById = async (req, res) => {
+const getEventById = async (req, res) => {
     try {
         const { id } = req.params;
-
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid Event ID format"
+                message: "Invalid Event ID format",
             });
         }
-
-        const event = await Event.findById(id).populate('destination_id user_id');
+        const event = await Event.findById(id)
+            .populate('destination_id', 'name') // Populate destination
+            .populate('user_id', 'firstname lastname'); // Populate organizer (user)
         if (!event) {
             return res.status(404).json({
                 success: false,
-                message: "Event not found"
+                message: "Event not found",
             });
         }
-
         res.status(200).json({
             success: true,
             message: "Event fetched successfully",
-            data: event
+            data: event,
         });
     } catch (error) {
+        console.error("Error in getEventById:", error.message);
         res.status(500).json({
             success: false,
             message: "Server error",
-            error: error.message
+            error: error.message,
         });
     }
 };
+
 
 /**
  * @desc    Create a new event
  * @route   POST /api/events
  * @access  Public
  */
-exports.createEvent = async (req, res) => {
+const createEvent = async (req, res) => {
     try {
         const newEvent = new Event(req.body);
         await newEvent.save();
@@ -122,7 +124,7 @@ exports.createEvent = async (req, res) => {
  * @route   PUT /api/events/:id
  * @access  Public
  */
-exports.updateEvent = async (req, res) => {
+const updateEvent = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -161,7 +163,7 @@ exports.updateEvent = async (req, res) => {
  * @route   DELETE /api/events/:id
  * @access  Public
  */
-exports.deleteEvent = async (req, res) => {
+const deleteEvent = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -192,4 +194,13 @@ exports.deleteEvent = async (req, res) => {
             error: error.message
         });
     }
+};
+
+
+module.exports = {
+    getEvents,
+    getEventById,
+    createEvent,
+    updateEvent,
+    deleteEvent
 };

@@ -8,6 +8,7 @@ import About from "./pages/about";
 import Contact from "./pages/contact";
 import Login from "./pages/login";
 import Profile from "./pages/Profile";
+import EventDetail from "./pages/eventDetail.jsx";
 import DestinationDetail from "./pages/destinationDetail.jsx";
 import BusinessRegistrationForm from "./pages/BusinessRegistrationForm.jsx";
 import BusinessInfo from "./pages/businessInfo.jsx";
@@ -18,13 +19,13 @@ import { jwtDecode } from "jwt-decode"; // Add jwt-decode
 
 const ProtectedAdminRoute = ({ element }) => {
   const token = localStorage.getItem("authToken");
-  if (!token) return <Navigate to="/admin-login" />;
+  if (!token) return <Navigate to="/adminLogin" />;
 
   try {
     const decoded = jwtDecode(token);
-    return decoded.role === "admin" ? element : <Navigate to="/admin-login" />;
+    return decoded.role === "admin" ? element : <Navigate to="/adminLogin" />;
   } catch (error) {
-    return <Navigate to="/admin-login" />;
+    return <Navigate to="/adminLogin" />;
   }
 };
 
@@ -35,6 +36,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/destinations" element={<Destinations />} />
           <Route path="/destinations/:id" element={<DestinationDetail />} />
           <Route path="/blogs" element={<Blogs />} />
@@ -44,7 +46,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/BusinessRegistrationForm" element={<BusinessRegistrationForm />} />
           <Route path="/BusinessInfo" element={<BusinessInfo />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/adminLogin" element={<AdminLogin />} />
           <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPanel />} />} />
           <Route path="*" element={<Home />} />
         </Routes>
