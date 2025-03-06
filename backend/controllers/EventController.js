@@ -8,20 +8,49 @@ const Event = require('../models/Event');
  */
 exports.getEvents = async (req, res) => {
     try {
-        const events = await Event.find().populate('destination_id user_id');
-        const totalEvents = await Event.countDocuments();
+        let { search, location } = req.query;
+        let filter = {};
+
+        if (search && location) {
+            // If both search and location are provided, match events that satisfy both
+            filter = {
+                $and: [
+                    {
+                        $or: [
+                            { name: { $regex: search, $options: "i" } },
+                            { location: { $regex: search, $options: "i" } }
+                        ]
+                    },
+                    { location: { $regex: location, $options: "i" } }
+                ]
+            };
+        } else if (search) {
+            // If only search is provided
+            filter = {
+                $or: [
+                    { name: { $regex: search, $options: "i" } },
+                    { location: { $regex: search, $options: "i" } }
+                ]
+            };
+        } else if (location) {
+            // If only location is provided
+            filter.location = { $regex: location, $options: "i" };
+        }
+
+        // Fetch events with filters
+        const events = await Event.find(filter).populate("destination_id user_id");
 
         res.status(200).json({
             success: true,
             message: "Events fetched successfully",
-            total: totalEvents,
-            data: events
+            total: events.length,
+            data: events,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
             message: "Server error",
-            error: error.message
+            error: error.message,
         });
     }
 };

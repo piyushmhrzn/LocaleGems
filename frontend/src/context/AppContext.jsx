@@ -49,13 +49,27 @@ export const AppProvider = ({ children }) => {
         if (token) fetchUser(token);
     }, []);
 
+    const fetchEvents = async (filters = {}) => {
+        setLoading(true);
+        try {
+            const queryParams = new URLSearchParams(filters).toString();
+            console.log("Fetching events with filters:", queryParams); // Debugging line
+            const response = await axios.get(`${baseURL}/events?${queryParams}`);
+            setEvents(response.data.data);
+        } catch (error) {
+            console.error("Error fetching filtered events:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem("authToken");
         setUser(null);
     };
 
     return (
-        <AppContext.Provider value={{ events, destinations, blogs, user, setUser, logout, loading }}>
+        <AppContext.Provider value={{ events, destinations, blogs, user, setUser, logout, loading, fetchEvents }}>
             {children}
         </AppContext.Provider>
     );

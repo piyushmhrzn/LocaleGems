@@ -74,8 +74,15 @@ const createBusiness = async (req, res) => {
             coordinates,
             status: 'pending', // Default status
         });
+        console.log("New Business Object:", newBusiness);
+        try {
+            console.log("Attempting to save business:", newBusiness);
+            const savedBusiness = await newBusiness.save();
+            console.log("Business saved successfully:", savedBusiness);
+        } catch (saveError) {
+            console.error("Error saving business:", saveError.message);
+        }
 
-        await newBusiness.save();
 
         res.status(201).json({
             success: true,

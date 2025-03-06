@@ -8,8 +8,8 @@ import About from "./pages/about";
 import Contact from "./pages/contact";
 import Login from "./pages/login";
 import Profile from "./pages/Profile";
-import DestinationDetail from "./pages/DestinationDetail";
-import BusinessRegistrationForm from "./pages/BusinessRegistrationForm";
+import DestinationDetail from "./pages/destinationDetail.jsx";
+import BusinessRegistrationForm from "./pages/BusinessRegistrationForm.jsx";
 import AdminPanel from "./pages/adminpanel.jsx";
 import AdminLogin from "./pages/adminlogin.jsx";
 import { AppProvider } from "./context/AppContext";
@@ -41,7 +41,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/business-registration" element={<BusinessRegistrationForm />} />
+          <Route path="/BusinessRegistrationForm" element={<BusinessRegistrationForm />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPanel />} />} />
           <Route path="*" element={<Home />} />
