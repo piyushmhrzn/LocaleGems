@@ -89,7 +89,7 @@ const About = () => {
             <p>
               We envision a world where every journey helps preserve culture and empower communities. 
               With future features like multi-language support, event reminders, and gamification, 
-              LocaleGems will make travel not just meaningful—but fun and personalized too.
+              LocaleGems will make travel not just meaningful—but fun and personalized too. Get your journey started.
             </p>
           </div>
         </div>
