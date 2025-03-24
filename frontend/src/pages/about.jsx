@@ -12,7 +12,7 @@ const About = () => {
 
       <Banner
         heading="About Us"
-        subheading="Connecting travelers with local cultural gems."
+        subheading="Connecting travelers with local cultural gems. Get ready to Explore."
         backgroundImage="/images/about-banner.jpg"
       />
 
