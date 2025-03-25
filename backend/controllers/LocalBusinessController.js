@@ -206,10 +206,15 @@ const updateBusiness = async (req, res) => {
             category,
             description,
             location,
+            city,
+            country,
             contactEmail,
             contactPhone,
-            destination, // From form
+            destination_id,
             proximity_to_destination,
+            website,
+            businessHours,
+            image,
         } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -240,10 +245,15 @@ const updateBusiness = async (req, res) => {
                 category,
                 description,
                 location,
+                city,
+                country,
                 contactEmail,
                 contactPhone,
-                destination_id: destination, // Map to destination_id
+                destination_id,
                 proximity_to_destination,
+                website,
+                businessHours,
+                image,
                 coordinates,
             },
             { new: true, runValidators: true }
