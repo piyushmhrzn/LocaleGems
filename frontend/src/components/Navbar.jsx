@@ -5,8 +5,10 @@ import { BiSearch, BiUser } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const NavBar = () => {
+  const { t, i18n } = useTranslation(); // Access translations and i18n instance
   const [scrolled, setScrolled] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,6 +19,10 @@ const NavBar = () => {
 
   const handleScroll = () => {
     setScrolled(window.scrollY > 50);
+  };
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
   };
 
   useEffect(() => {
@@ -122,35 +128,35 @@ const NavBar = () => {
     >
       <Container>
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-          <Navbar.Brand as={Link} to="/" className="fw-bold text-white">LocaleGems</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/" className="fw-bold text-white">{t("LocaleGems")}</Navbar.Brand>
         </motion.div>
 
         <Navbar.Toggle aria-controls="navbar-nav" className="border-0" style={{ backgroundColor: "white" }} />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="ms-auto">
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-              <Nav.Link as={Link} to="/events" className="text-white ms-3">Events</Nav.Link>
+              <Nav.Link as={Link} to="/events" className="text-white ms-3">{t("Events")}</Nav.Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-              <Nav.Link as={Link} to="/destinations" className="text-white ms-3">Destinations</Nav.Link>
+              <Nav.Link as={Link} to="/destinations" className="text-white ms-3">{t("Destinations")}</Nav.Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-              <Nav.Link as={Link} to="/blogs" className="text-white ms-3">Blogs</Nav.Link>
+              <Nav.Link as={Link} to="/blogs" className="text-white ms-3">{t("Blogs")}</Nav.Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-              <Nav.Link as={Link} to="/about" className="text-white ms-3">About Us</Nav.Link>
+              <Nav.Link as={Link} to="/about" className="text-white ms-3">{t("About Us")}</Nav.Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-              <Nav.Link as={Link} to="/contact" className="text-white ms-3">Contact</Nav.Link>
+              <Nav.Link as={Link} to="/contact" className="text-white ms-3">{t("Contact")}</Nav.Link>
             </motion.div>
             {(!user || (user.role === "owner" && !hasBusiness)) && (
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-                <Nav.Link as={Link} to="/BusinessRegistrationForm" className="text-white ms-3">Register Business</Nav.Link>
+                <Nav.Link as={Link} to="/BusinessRegistrationForm" className="text-white ms-3">{t("Register Business")}</Nav.Link>
               </motion.div>
             )}
             {user && user.role === "owner" && hasBusiness && (
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
-                <Nav.Link as={Link} to="/BusinessInfo" className="text-white ms-3">Business Info</Nav.Link>
+                <Nav.Link as={Link} to="/BusinessInfo" className="text-white ms-3">{t("Business Info")}</Nav.Link>
               </motion.div>
             )}
           </Nav>
@@ -168,7 +174,7 @@ const NavBar = () => {
                 <Form className="d-flex ms-3" onSubmit={handleSearchSubmit}>
                   <FormControl
                     type="search"
-                    placeholder="Search destinations, events, blogs..."
+                    placeholder={t("Search destinations, events, blogs...")}
                     className="me-2"
                     aria-label="Search"
                     value={searchQuery}
@@ -178,12 +184,12 @@ const NavBar = () => {
 
                 {(searchResults.destinations.length > 0 || searchResults.events.length > 0 || searchResults.blogs.length > 0) && (
                   <div
-                    className="position-absolute bg-white shadow rounded p-3" // Increased padding from p-2 to p-3
+                    className="position-absolute bg-white shadow rounded p-3"
                     style={{ top: "100%", right: 0, zIndex: 1000, minWidth: "300px" }}
                   >
                     {searchResults.destinations.length > 0 && (
                       <>
-                        <h6 className="text-light bg-dark p-2 mb-2">Destinations</h6> {/* Added mb-2 for margin below header */}
+                        <h6 className="text-light bg-dark p-2 mb-2">{t("Destinations")}</h6>
                         {searchResults.destinations.map(dest => (
                           <Dropdown.Item
                             key={dest._id}
@@ -197,7 +203,7 @@ const NavBar = () => {
                     )}
                     {searchResults.events.length > 0 && (
                       <>
-                        <h6 className="text-light bg-dark p-2 mb-2 mt-3">Events</h6> {/* Added mb-2 and mt-3 for spacing */}
+                        <h6 className="text-light bg-dark p-2 mb-2 mt-3">{t("Events")}</h6>
                         {searchResults.events.map(event => (
                           <Dropdown.Item
                             key={event._id}
@@ -211,14 +217,14 @@ const NavBar = () => {
                     )}
                     {searchResults.blogs.length > 0 && (
                       <>
-                        <h6 className="text-light bg-dark p-2 mb-2 mt-3">Blogs</h6> {/* Added mb-2 and mt-3 for spacing */}
+                        <h6 className="text-light bg-dark p-2 mb-2 mt-3">{t("Blogs")}</h6>
                         {searchResults.blogs.map(blog => (
                           <Dropdown.Item
                             key={blog._id}
                             onClick={() => handleResultClick("blogs", blog._id)}
                             className="py-1"
                           >
-                            {blog.title || "Untitled Blog"}
+                            {blog.title || t("Untitled Blog")}
                           </Dropdown.Item>
                         ))}
                       </>
@@ -229,6 +235,7 @@ const NavBar = () => {
             )}
           </div>
 
+          {/* User Dropdown */}
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 200, damping: 10 }} style={{ display: "inline-block" }}>
             {user ? (
               <NavDropdown
@@ -237,8 +244,8 @@ const NavBar = () => {
                 className="ms-3 text-white"
                 align="end"
               >
-                <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
-                <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profile">{t("Profile")}</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleLogout}>{t("Logout")}</NavDropdown.Item>
               </NavDropdown>
             ) : (
               <Nav.Link as={Link} to="/login" className="ms-3 text-white">
@@ -246,6 +253,21 @@ const NavBar = () => {
               </Nav.Link>
             )}
           </motion.div>
+
+          {/* Language Switcher */}
+          <NavDropdown
+            title={i18n.language.toUpperCase()}
+            id="language-dropdown"
+            className="ms-3 text-white"
+            align="end"
+          >
+            <NavDropdown.Item onClick={() => changeLanguage("en")}>{t("English")}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => changeLanguage("es")}>{t("Spanish")}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => changeLanguage("fr")}>{t("French")}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => changeLanguage("hi")}>{t("Hindi")}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => changeLanguage("ne")}>{t("Nepali")}</NavDropdown.Item>
+            {/* Add more languages as needed */}
+          </NavDropdown>
         </Navbar.Collapse>
       </Container>
     </Navbar>

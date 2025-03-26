@@ -5,8 +5,10 @@ import CustomButton from "./Button.jsx";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+    const { t } = useTranslation();
     const [email, setEmail] = useState(""); // State for email input
     const [isSubmitting, setIsSubmitting] = useState(false); // Optional: Disable button during submission
 
@@ -32,12 +34,12 @@ const Footer = () => {
                 <Container>
                     <Row className="text-center">
                         <Col>
-                            <h5>Subscribe to Our Newsletter</h5>
-                            <p>Get the latest updates on destinations, events, and travel tips.</p>
+                            <h5>{t("Subscribe to Our Newsletter")}</h5>
+                            <p>{t("Get the latest updates")}</p>
                             <Form className="d-flex justify-content-center" onSubmit={handleSubmit}>
                                 <Form.Control
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={t("Enter your email")}
                                     className="w-50 me-2"
                                     style={{
                                         borderRadius: "30px",
@@ -50,7 +52,7 @@ const Footer = () => {
                                     required // Ensure email is entered
                                 />
                                 <CustomButton
-                                    label="Subscribe"
+                                    label={t("Subscribe")}
                                     variant="warning"
                                     rounded
                                     className="text-white"
@@ -83,11 +85,11 @@ const Footer = () => {
                         <Col md={4} className="mb-4">
                             <h5 className="mb-3">Quick Links</h5>
                             <ul className="list-unstyled">
-                                <li><a href="/events" className="text-dark text-decoration-none">Events</a></li>
-                                <li><a href="/destinations" className="text-dark text-decoration-none">Destinations</a></li>
-                                <li><a href="/blogs" className="text-dark text-decoration-none">Blogs</a></li>
-                                <li><a href="/about" className="text-dark text-decoration-none">About Us</a></li>
-                                <li><a href="/contact" className="text-dark text-decoration-none">Contact</a></li>
+                                <li><a href="/events" className="text-dark text-decoration-none">{t("Events")}</a></li>
+                                <li><a href="/destinations" className="text-dark text-decoration-none">{t("Destinations")}</a></li>
+                                <li><a href="/blogs" className="text-dark text-decoration-none">{t("Blogs")}</a></li>
+                                <li><a href="/about" className="text-dark text-decoration-none">{t("About Us")}</a></li>
+                                <li><a href="/contact" className="text-dark text-decoration-none">{t("Contact")}</a></li>
                             </ul>
                         </Col>
 

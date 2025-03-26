@@ -9,8 +9,10 @@ import BlogCard from "../components/BlogCard";
 import EventCard from "../components/EventCard";
 import CustomButton from "../components/Button";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { events } = useContext(AppContext);
   const { destinations } = useContext(AppContext);
@@ -21,14 +23,14 @@ const Home = () => {
       <NavBar />
 
       <Banner
-        heading="Discover the Best Cultural Experiences"
-        subheading="Find the most authentic local experiences near you."
+        heading={t("Discover the Best Cultural Experiences")}
+        subheading={t("Find the most authentic local experiences near you")}
         images={["/images/home-banner1.jpg", "/images/home-banner2.jpg", "/images/home-banner3.jpg"]}
         isSlider={true} // Enable slider for home page
       >
         <div className="text-center mt-5">
           <CustomButton
-            label="Explore Now"
+            label={t("Explore Now")}
             variant="light"
             size="lg"
             rounded="true"
@@ -40,7 +42,7 @@ const Home = () => {
       <Container>
         {/* Events Cards */}
         <Row className="my-5">
-          <h2 className="text-center mt-4 mb-4">Featured Cultural Events</h2>
+          <h2 className="text-center mt-4 mb-4">{t("Featured Cultural Events")}</h2>
           <Row>
             {events.map(event => (
               <Col key={event._id} md={6}>
