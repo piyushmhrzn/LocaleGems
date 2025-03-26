@@ -5,8 +5,10 @@ import Footer from "../components/Footer";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const BusinessRegistrationForm = () => {
+    const { t } = useTranslation();
     const { destinations } = useContext(AppContext);
     const [formData, setFormData] = useState({
         name: "",
@@ -55,8 +57,8 @@ const BusinessRegistrationForm = () => {
         <>
             <NavBar />
             <Banner
-                heading="Register Your Business Today!"
-                subheading="We are here to help you."
+                heading={t("Register Your Business Today!")}
+                subheading={t("We are here to help you")}
                 backgroundImage="/images/about-banner.jpg"
                 height="60vh"
             />

@@ -4,15 +4,18 @@ import { ShopWindow, Compass, GlobeAmericas } from "react-bootstrap-icons";
 import NavBar from "../components/Navbar";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <NavBar />
 
       <Banner
-        heading="About Us"
-        subheading="Connecting travelers with local cultural gems."
+        heading={t("About Us")}
+        subheading={t("Connecting travelers with local cultural gems")}
         backgroundImage="/images/about-banner.jpg"
       />
 

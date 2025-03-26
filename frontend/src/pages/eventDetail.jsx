@@ -9,13 +9,16 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import CustomButton from "../components/Button";
 import Countdown from "react-countdown";
 import moment from "moment";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaShare } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
+import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
+import { useTranslation } from "react-i18next";
 
 const containerStyle = { width: "100%", height: "400px" };
 const BASE_URL = "http://localhost:3000";
 
 const EventDetail = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(AppContext);
@@ -54,7 +57,7 @@ const EventDetail = () => {
     }, [id]);
 
     const handleRating = async () => {
-        if (!user) return alert("Please log in to rate this event.");
+        if (!user) return alert(t("Please log in to rate this event."));
         try {
             const token = localStorage.getItem("authToken");
             await axios.post(
@@ -66,13 +69,13 @@ const EventDetail = () => {
             setUserRating(0);
         } catch (error) {
             console.error("Error submitting rating:", error);
-            alert("Failed to submit rating.");
+            alert(t("Failed to submit rating."));
         }
     };
 
     const handleComment = async (e) => {
         e.preventDefault();
-        if (!user) return alert("Please log in to comment.");
+        if (!user) return alert(t("Please log in to comment."));
         try {
             const token = localStorage.getItem("authToken");
             await axios.post(
@@ -84,22 +87,23 @@ const EventDetail = () => {
             setUserComment("");
         } catch (error) {
             console.error("Error submitting comment:", error);
-            alert("Failed to submit comment.");
+            alert(t("Failed to submit comment."));
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (!event) return <div>Event not found</div>;
+    if (loading) return <div>{t("Loading...")}</div>;
+    if (!event) return <div>{t("Event not found")}</div>;
 
     const eventDate = moment(event.date).format("MMMM Do YYYY, h:mm A");
     const locationParts = event.location.split(",");
     const lat = parseFloat(locationParts[0]);
     const lng = parseFloat(locationParts[1]);
     const center = { lat: isNaN(lat) ? 0 : lat, lng: isNaN(lng) ? 0 : lng };
+    const averageRating = ratings.length ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : t("No ratings yet");
+    const shareUrl = `${window.location.origin}/events/${id}`;
+    const shareTitle = `${event.name} - ${eventDate}`;
+    const shareDescription = `Join me at ${event.name} on ${eventDate} at ${event.location}!`;
 
-    const averageRating = ratings.length ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : "No ratings yet";
-
-    // Combine ratings and comments by user
     const reviews = ratings.map(r => {
         const comment = comments.find(c => c.user_id._id === r.user_id._id);
         return { ...r, comment: comment?.comment };
@@ -133,23 +137,50 @@ const EventDetail = () => {
                     </Col>
                     <Col md={6}>
                         <h2 className="fw-bold" style={{ color: "#333333" }}>{event.name}</h2>
-                        <p><strong>Date:</strong> {eventDate}</p>
-                        <p><strong>Location:</strong> {event.location}</p>
-                        <p><strong>Organizer:</strong> {event.user_id?.firstname} {event.user_id?.lastname}</p>
-                        <Badge bg="success" className="mb-3">Upcoming Event</Badge>
-                        <h5 className="mt-4">Countdown to Event:</h5>
+                        <p><strong>{t("Date")}:</strong> {eventDate}</p>
+                        <p><strong>{t("Location")}:</strong> {event.location}</p>
+                        <p><strong>{t("Organizer")}:</strong> {event.user_id?.firstname} {event.user_id?.lastname}</p>
+                        <Badge bg="success" className="mb-3">{t("Upcoming Event")}</Badge>
+                        <h5 className="mt-4">{t("Countdown to Event")}:</h5>
                         <Countdown
                             date={event.date}
                             renderer={({ days, hours, minutes, seconds }) => (
                                 <h4 className="fw-bold text-danger">
-                                    {days} <span className="text-dark">days</span> {hours} <span className="text-dark">hrs </span>
-                                    {minutes} <span className="text-dark">min</span> {seconds} <span className="text-dark">sec</span>
+                                    {days} <span className="text-dark">{t("days")}</span> {hours} <span className="text-dark">{t("hrs")}</span>
+                                    {minutes} <span className="text-dark">{t("min")}</span> {seconds} <span className="text-dark">{t("sec")}</span>
                                 </h4>
                             )}
                         />
+                        {/* Social Sharing Buttons */}
+                        <div className="mt-5 mb-5">
+                            <h5 className="text-primary">{t("Share this Event")}</h5>
+                            <div className="d-flex gap-2">
+                                <FacebookShareButton url={shareUrl} quote={shareDescription} hashtag="#LocaleGems">
+                                    <FacebookIcon size={32} round />
+                                </FacebookShareButton>
+                                <TwitterShareButton url={shareUrl} title={shareTitle} hashtags={["LocaleGems", "Events"]}>
+                                    <TwitterIcon size={32} round />
+                                </TwitterShareButton>
+                                <CustomButton
+                                    label={
+                                        <span className="d-flex align-items-center">
+                                            <FaShare className="me-2" /> {t("Share")}
+                                        </span>
+                                    }
+                                    variant="info"
+                                    size="sm"
+                                    rounded="true"
+                                    className="text-white"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(shareUrl);
+                                        alert(t("Link copied to clipboard! Paste it into your social media website."));
+                                    }}
+                                />
+                            </div>
+                        </div>
                         <div className="mt-4">
                             <CustomButton
-                                label="Back to Events"
+                                label={t("Back to Events")}
                                 variant="warning"
                                 size="md"
                                 rounded="true"
@@ -162,7 +193,7 @@ const EventDetail = () => {
 
                 <Row className="mb-5">
                     <Col md={6}>
-                        <h3 className="fw-bold text-primary">Explore on Map</h3>
+                        <h3 className="fw-bold text-primary">{t("Explore on Map")}</h3>
                         <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                                 <Marker position={center} label={event.name} />
@@ -171,10 +202,9 @@ const EventDetail = () => {
                     </Col>
                 </Row>
 
-                {/* Rating Section */}
                 <Row className="mb-5">
                     <Col>
-                        <h3 className="mb-2 fw-bold text-primary">Rate this Event</h3>
+                        <h3 className="mb-2 fw-bold text-primary">{t("Rate this Event")}</h3>
                         <div>
                             {[1, 2, 3, 4, 5].map(star => (
                                 <FaStar
@@ -187,20 +217,19 @@ const EventDetail = () => {
                             ))}
                         </div>
                         <CustomButton
-                            label="Submit Rating"
+                            label={t("Submit Rating")}
                             variant="info"
                             rounded="true"
                             className="mt-2 text-white"
                             onClick={handleRating}
                         />
-                        <p className="mt-2">Average Rating: {averageRating}</p>
+                        <p className="mt-2">{t("Average Rating")}: {averageRating}</p>
                     </Col>
                 </Row>
 
-                {/* Comment Section */}
                 <Row className="mb-5">
                     <Col>
-                        <h3 className="mb-2 fw-bold text-primary">Leave a Review</h3>
+                        <h3 className="mb-2 fw-bold text-primary">{t("Leave a Review")}</h3>
                         <Form onSubmit={handleComment}>
                             <Form.Group className="mb-3">
                                 <Form.Control
@@ -208,12 +237,12 @@ const EventDetail = () => {
                                     rows={3}
                                     value={userComment}
                                     onChange={(e) => setUserComment(e.target.value)}
-                                    placeholder="Leave a comment..."
+                                    placeholder={t("Leave a comment...")}
                                     required
                                 />
                             </Form.Group>
                             <CustomButton
-                                label="Submit Comment"
+                                label={t("Submit Comment")}
                                 variant="info"
                                 rounded="true"
                                 className="mt-2 text-white"
@@ -223,12 +252,11 @@ const EventDetail = () => {
                     </Col>
                 </Row>
 
-                {/* Rating & Reviews Section */}
                 <Row className="mb-5">
                     <Col>
-                        <h3 className="mb-2 fw-bold text-primary">Rating & Reviews</h3>
+                        <h3 className="mb-2 fw-bold text-primary">{t("Rating & Reviews")}</h3>
                         {reviews.length === 0 ? (
-                            <p>No reviews yet.</p>
+                            <p>{t("No reviews yet.")}</p>
                         ) : (
                             reviews.map((review, index) => (
                                 <div key={index} className="mb-4">
@@ -266,7 +294,7 @@ const EventDetail = () => {
 
                 {relatedEvents.length > 0 && (
                     <Row>
-                        <h3 className="fw-bold text-primary text-center">Related Events</h3>
+                        <h3 className="fw-bold text-primary text-center">{t("Related Events")}</h3>
                         {relatedEvents.map((related) => (
                             <Col key={related._id} md={4} className="mb-4">
                                 <Card>
@@ -274,10 +302,10 @@ const EventDetail = () => {
                                     <Card.Body>
                                         <Card.Title>{related.name}</Card.Title>
                                         <Card.Text>
-                                            <strong>Date:</strong> {moment(related.date).format("MMMM Do YYYY, h:mm A")}
+                                            <strong>{t("Date")}:</strong> {moment(related.date).format("MMMM Do YYYY, h:mm A")}
                                         </Card.Text>
                                         <CustomButton
-                                            label="View Details"
+                                            label={t("View Details")}
                                             variant="dark"
                                             size="md"
                                             onClick={() => navigate(`/events/${related._id}`)}

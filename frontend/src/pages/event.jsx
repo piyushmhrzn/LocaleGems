@@ -6,8 +6,10 @@ import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import Card from "../components/Card";
 import { AppContext } from "../context/AppContext";
+import { useTranslation } from "react-i18next";
 
 const Events = () => {
+    const { t } = useTranslation();
     const { events, fetchEvents, loading } = useContext(AppContext);
     const [search, setSearch] = useState("");
     const [location, setLocation] = useState("");
@@ -42,8 +44,8 @@ const Events = () => {
         <>
             <NavBar />
             <Banner
-                heading="See what's the Latest Events"
-                subheading="Find events happening near you."
+                heading={t("See what's the Latest Events")}
+                subheading={t("Find events happening near you")}
                 backgroundImage="/images/event-banner.jpg"
             />
             <Container>

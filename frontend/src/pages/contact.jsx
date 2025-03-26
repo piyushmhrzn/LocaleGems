@@ -4,15 +4,18 @@ import { GeoAltFill, EnvelopeFill, TelephoneFill } from "react-bootstrap-icons";
 import NavBar from "../components/Navbar";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
+import { useTranslation } from "react-i18next";
 
 const Contact = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <NavBar />
 
       <Banner
-        heading="Contact Us"
-        subheading="Stay connected with us."
+        heading={t("Contact Us")}
+        subheading={t("Stay connected with us")}
         backgroundImage="/images/contact-banner.jpg"
       />
 

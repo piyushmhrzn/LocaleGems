@@ -7,13 +7,16 @@ import Banner from "../components/Banner";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import CustomButton from "../components/Button";
-import { FaCoffee, FaUtensils, FaShoppingBag, FaCalendarAlt, FaStar } from "react-icons/fa";
+import { FaCoffee, FaUtensils, FaShoppingBag, FaCalendarAlt, FaStar, FaShare } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
+import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
+import { useTranslation } from "react-i18next";
 
 const containerStyle = { width: "100%", height: "400px" };
 const BASE_URL = "http://localhost:3000";
 
 const DestinationDetail = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(AppContext);
@@ -64,7 +67,7 @@ const DestinationDetail = () => {
     }, [id]);
 
     const handleRating = async () => {
-        if (!user) return alert("Please log in to rate this destination.");
+        if (!user) return alert(t("Please log in to rate this destination."));
         try {
             const token = localStorage.getItem("authToken");
             await axios.post(
@@ -76,13 +79,13 @@ const DestinationDetail = () => {
             setUserRating(0);
         } catch (error) {
             console.error("Error submitting rating:", error);
-            alert("Failed to submit rating.");
+            alert(t("Failed to submit rating."));
         }
     };
 
     const handleComment = async (e) => {
         e.preventDefault();
-        if (!user) return alert("Please log in to comment.");
+        if (!user) return alert(t("Please log in to comment."));
         try {
             const token = localStorage.getItem("authToken");
             await axios.post(
@@ -94,12 +97,12 @@ const DestinationDetail = () => {
             setUserComment("");
         } catch (error) {
             console.error("Error submitting comment:", error);
-            alert("Failed to submit comment.");
+            alert(t("Failed to submit comment."));
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (!destination) return <div>Destination not found</div>;
+    if (loading) return <div>{t("Loading...")}</div>;
+    if (!destination) return <div>{t("Destination not found")}</div>;
 
     const center = {
         lat: destination.coordinates?.coordinates[1] || parseFloat(destination.location.split(",")[0]),
@@ -115,9 +118,11 @@ const DestinationDetail = () => {
         }
     };
 
-    const averageRating = ratings.length ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : "No ratings yet";
+    const averageRating = ratings.length ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : t("No ratings yet");
+    const shareUrl = `${window.location.origin}/destinations/${id}`;
+    const shareTitle = `${destination.name} - ${destination.city}, ${destination.country}`;
+    const shareDescription = destination.short_description;
 
-    // Combine ratings and comments by user
     const reviews = ratings.map(r => {
         const comment = comments.find(c => c.user_id._id === r.user_id._id);
         return { ...r, comment: comment?.comment };
@@ -139,14 +144,41 @@ const DestinationDetail = () => {
             <Container className="py-5">
                 <Row className="mb-5">
                     <Col md={6}>
-                        <h2 className="mb-3 fw-bold text-primary">Details</h2>
-                        <p><strong>Location:</strong> {destination.location}</p>
-                        <p><strong>City:</strong> {destination.city}</p>
-                        <p><strong>Country:</strong> {destination.country}</p>
+                        <h2 className="mb-3 fw-bold text-primary">{t("Details")}</h2>
+                        <p><strong>{t("Location")}:</strong> {destination.location}</p>
+                        <p><strong>{t("City")}:</strong> {destination.city}</p>
+                        <p><strong>{t("Country")}:</strong> {destination.country}</p>
                         <p className="text-muted">{destination.long_description}</p>
+                        {/* Social Sharing Buttons */}
+                        <div className="mt-5">
+                            <h5 className="text-primary">{t("Share this Destination")}</h5>
+                            <div className="d-flex gap-2">
+                                <FacebookShareButton url={shareUrl} quote={shareDescription} hashtag="#LocaleGems">
+                                    <FacebookIcon size={32} round />
+                                </FacebookShareButton>
+                                <TwitterShareButton url={shareUrl} title={shareTitle} hashtags={["LocaleGems", "Travel"]}>
+                                    <TwitterIcon size={32} round />
+                                </TwitterShareButton>
+                                <CustomButton
+                                    label={
+                                        <span className="d-flex align-items-center">
+                                            <FaShare className="me-2" /> {t("Share")}
+                                        </span>
+                                    }
+                                    variant="info"
+                                    size="sm"
+                                    rounded="true"
+                                    className="text-white"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(shareUrl);
+                                        alert(t("Link copied to clipboard! Paste it into your social media platform."));
+                                    }}
+                                />
+                            </div>
+                        </div>
                     </Col>
                     <Col md={6}>
-                        <h2 className="mb-3 fw-bold text-primary">Explore on Map</h2>
+                        <h2 className="mb-3 fw-bold text-primary">{t("Explore on Map")}</h2>
                         <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                                 <Marker position={center} label={destination.name} />
@@ -164,10 +196,9 @@ const DestinationDetail = () => {
                     </Col>
                 </Row>
 
-                {/* Rating Section */}
                 <Row className="mb-5">
                     <Col>
-                        <h3 className="mb-2 fw-bold text-primary">Rate this Destination</h3>
+                        <h3 className="mb-2 fw-bold text-primary">{t("Rate this Destination")}</h3>
                         <div>
                             {[1, 2, 3, 4, 5].map(star => (
                                 <FaStar
@@ -180,20 +211,19 @@ const DestinationDetail = () => {
                             ))}
                         </div>
                         <CustomButton
-                            label="Submit Rating"
+                            label={t("Submit Rating")}
                             variant="info"
                             rounded="true"
                             className="mt-2 text-white"
                             onClick={handleRating}
                         />
-                        <p className="mt-2">Average Rating: {averageRating}</p>
+                        <p className="mt-2">{t("Average Rating")}: {averageRating}</p>
                     </Col>
                 </Row>
 
-                {/* Comment Section */}
                 <Row className="mb-5">
                     <Col>
-                        <h3 className="mb-2 fw-bold text-primary">Leave a Review</h3>
+                        <h3 className="mb-2 fw-bold text-primary">{t("Leave a Review")}</h3>
                         <Form onSubmit={handleComment}>
                             <Form.Group className="mb-3">
                                 <Form.Control
@@ -201,12 +231,12 @@ const DestinationDetail = () => {
                                     rows={3}
                                     value={userComment}
                                     onChange={(e) => setUserComment(e.target.value)}
-                                    placeholder="Leave a comment..."
+                                    placeholder={t("Leave a comment...")}
                                     required
                                 />
                             </Form.Group>
                             <CustomButton
-                                label="Submit Comment"
+                                label={t("Submit Comment")}
                                 variant="info"
                                 rounded="true"
                                 className="mt-2 text-white"
@@ -216,12 +246,11 @@ const DestinationDetail = () => {
                     </Col>
                 </Row>
 
-                {/* Rating & Reviews Section */}
                 <Row className="mb-5">
                     <Col>
-                        <h3 className="mb-2 fw-bold text-primary">Rating & Reviews</h3>
+                        <h3 className="mb-2 fw-bold text-primary">{t("Rating & Reviews")}</h3>
                         {reviews.length === 0 ? (
-                            <p>No reviews yet.</p>
+                            <p>{t("No reviews yet.")}</p>
                         ) : (
                             reviews.map((review, index) => (
                                 <div key={index} className="mb-4">
@@ -259,9 +288,9 @@ const DestinationDetail = () => {
 
                 <Row className="mb-5">
                     <Col>
-                        <h2 className="mb-4 fw-bold" style={{ color: "#007bff" }}>Nearby Businesses</h2>
+                        <h2 className="mb-4 fw-bold" style={{ color: "#007bff" }}>{t("Nearby Businesses")}</h2>
                         {businesses.length === 0 ? (
-                            <p>No businesses found for this destination.</p>
+                            <p>{t("No businesses found for this destination.")}</p>
                         ) : (
                             <Row>
                                 {businesses.map(business => (
@@ -285,9 +314,9 @@ const DestinationDetail = () => {
 
                 <Row className="mb-5">
                     <Col>
-                        <h2 className="mb-4 fw-bold" style={{ color: "#007bff" }}>Upcoming Events</h2>
+                        <h2 className="mb-4 fw-bold" style={{ color: "#007bff" }}>{t("Upcoming Events")}</h2>
                         {events.length === 0 ? (
-                            <p>No events found for this destination.</p>
+                            <p>{t("No events found for this destination.")}</p>
                         ) : (
                             <Row>
                                 {events.map(event => (
@@ -312,7 +341,7 @@ const DestinationDetail = () => {
 
                 <div className="text-center">
                     <CustomButton
-                        label="Back to Destinations"
+                        label={t("Back to Destinations")}
                         variant="primary"
                         size="md"
                         rounded="true"

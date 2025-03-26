@@ -5,8 +5,10 @@ import Footer from "../components/Footer";
 import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
+import { useTranslation } from "react-i18next";
 
 const Blogs = () => {
+  const { t } = useTranslation();
   const { blogs } = useContext(AppContext);
 
   return (
@@ -14,8 +16,8 @@ const Blogs = () => {
       <NavBar />
 
       <Banner
-        heading="Our Blog"
-        subheading="Stay updated with the latest stories and insights."
+        heading={t("Our Blog")}
+        subheading={t("Stay updated with the latest stories and insights")}
         backgroundImage="/images/blog-banner.jpg"
       />
 

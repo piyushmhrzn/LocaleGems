@@ -6,8 +6,11 @@ import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import Card from "../components/Card";
 import { AppContext } from "../context/AppContext";
+import { useTranslation } from "react-i18next";
 
 const Destinations = () => {
+  const { t } = useTranslation();
+
   const {
     destinations,
     fetchDestinations,
@@ -31,8 +34,8 @@ const Destinations = () => {
       <NavBar />
 
       <Banner
-        heading="Hidden Destinations you must visit"
-        subheading="We bring you all the hidden treasures from around the world."
+        heading={t("Hidden Destinations you must visit")}
+        subheading={t("We bring you all the hidden treasures from around the world")}
         backgroundImage="/images/destination-banner.jpg"
       />
 

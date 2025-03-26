@@ -8,8 +8,10 @@ import { motion } from "framer-motion";
 import CustomButton from "../components/Button";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
+import { useTranslation } from "react-i18next";
 
 const AuthPage = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { setUser } = useContext(AppContext);     // Get the setUser function from the context
     const [loginData, setLoginData] = useState({
@@ -78,8 +80,8 @@ const AuthPage = () => {
             <NavBar />
 
             <Banner
-                heading="Login or Sign Up"
-                subheading="Join us to discover the best cultural experiences."
+                heading={t("Login or Sign Up")}
+                subheading={t("Join us to discover the best cultural experiences")}
                 backgroundImage="/images/login-banner.jpg"
                 height="50vh"
             />
