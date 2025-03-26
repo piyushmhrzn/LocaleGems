@@ -6,7 +6,7 @@ import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
 import BlogCard from "../components/BlogCard";
-import EventCard from "../components/EventCard"; //
+import EventCard from "../components/EventCard";
 import CustomButton from "../components/Button";
 import { useNavigate, Link } from "react-router-dom";
 

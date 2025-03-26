@@ -164,3 +164,33 @@ exports.deleteBlog = async (req, res) => {
         });
     }
 };
+
+/**
+ * @desc    Search blogs by title
+ * @route   GET /api/blogs/search
+ * @access  Public
+ */
+exports.searchBlogs = async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: "Search query is required",
+            });
+        }
+        const blogs = await Blog.find({
+            title: { $regex: query, $options: "i" },
+        });
+        res.status(200).json({
+            success: true,
+            data: blogs,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};

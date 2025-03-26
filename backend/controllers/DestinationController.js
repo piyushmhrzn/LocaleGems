@@ -226,6 +226,36 @@ exports.deleteDestination = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Search destinations by name
+ * @route   GET /api/destinations/search
+ * @access  Public
+ */
+exports.searchDestinations = async (req, res) => {
+    try {
+        const { query } = req.query; // Changed from "search" to "query" for clarity
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: "Search query is required",
+            });
+        }
+        const destinations = await Destination.find({
+            name: { $regex: query, $options: "i" }, // Case-insensitive search
+        });
+        res.status(200).json({
+            success: true,
+            data: destinations,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     getDestinations: exports.getDestinations,
     getAllDestinations: [authMiddleware, exports.getAllDestinations], // Admin-specific
@@ -233,4 +263,5 @@ module.exports = {
     createDestination: exports.createDestination,
     updateDestination: [authMiddleware, exports.updateDestination],
     deleteDestination: [authMiddleware, exports.deleteDestination],
+    searchDestinations: exports.searchDestinations,
 };

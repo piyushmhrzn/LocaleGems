@@ -196,11 +196,45 @@ const deleteEvent = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Search events by name or location
+ * @route   GET /api/events/search
+ * @access  Public
+ */
+const searchEvents = async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: "Search query is required",
+            });
+        }
+        const events = await Event.find({
+            $or: [
+                { name: { $regex: query, $options: "i" } },
+                { location: { $regex: query, $options: "i" } },
+            ],
+        }).populate("destination_id", "name"); // Populate destination name for display
+        res.status(200).json({
+            success: true,
+            data: events,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
 
 module.exports = {
     getEvents,
     getEventById,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    searchEvents,
 };

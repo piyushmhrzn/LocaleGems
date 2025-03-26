@@ -1,5 +1,5 @@
 const express = require('express');
-const { getEvents, createEvent, getEventById, updateEvent, deleteEvent } = require('../controllers/EventController');
+const { getEvents, createEvent, getEventById, updateEvent, deleteEvent, searchEvents } = require('../controllers/EventController');
 
 const router = express.Router();
 
@@ -10,16 +10,22 @@ const router = express.Router();
 router.get('/', getEvents);
 
 /**
- * @route GET /api/events/:id
- * @desc Get a single event by ID
- */
-router.get('/:id', getEventById);
-
-/**
  * @route POST /api/events
  * @desc Create a new event
  */
 router.post('/', createEvent);
+
+/**
+ * @route GET /api/events/search
+ * @desc Search an event
+ */
+router.get('/search', searchEvents);
+
+/**
+ * @route GET /api/events/:id
+ * @desc Get a single event by ID
+ */
+router.get('/:id', getEventById);
 
 /**
  * @route PUT /api/events/:id
