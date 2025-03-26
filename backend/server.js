@@ -37,6 +37,8 @@ const EventRoutes = require('./routes/eventRoutes');
 const LocalBusinessRoutes = require('./routes/localBusinessRoutes');
 const BlogRoutes = require('./routes/blogRoutes');
 const AuthRoutes = require('./routes/authRoutes');
+const RatingRoutes = require('./routes/ratingRoutes');
+const CommentRoutes = require('./routes/commentRoutes');
 
 // ✅ Register route middlewares with their respective endpoints
 app.use('/api/users', UserRoutes);
@@ -45,6 +47,8 @@ app.use('/api/events', EventRoutes);
 app.use('/api/businesses', LocalBusinessRoutes);
 app.use('/api/blogs', BlogRoutes);
 app.use('/api/auth', AuthRoutes);
+app.use('/api/ratings', RatingRoutes);
+app.use('/api/comments', CommentRoutes);
 
 // Newsletter subscription route with email sending
 app.post('/api/newsletter/subscribe', async (req, res) => {
