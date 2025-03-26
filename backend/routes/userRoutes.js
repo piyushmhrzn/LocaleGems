@@ -1,5 +1,7 @@
 const express = require('express');
 const { getUsers, getAllUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/UserController');
+const upload = require('../middleware/uploadMiddleware');
+const authMiddleware = require('../middleware/authMiddleware'); // Assuming you have this
 
 const router = express.Router();
 
@@ -29,9 +31,9 @@ router.post('/', createUser);
 
 /**
  * @route PUT /api/users/:id
- * @desc Update user details
+ * @desc Update user details (with optional image upload)
  */
-router.put('/:id', updateUser);
+router.put('/:id', authMiddleware, upload.single('image'), updateUser);
 
 /**
  * @route DELETE /api/users/:id

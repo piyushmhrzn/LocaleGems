@@ -2,12 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.json()); // Parse JSON request bodies
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Create uploads folder if it doesn’t exist
+if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads');
+}
 
 // Getting the port from .env file
 const PORT = process.env.PORT || 3000;
@@ -18,7 +26,7 @@ const DestinationRoutes = require('./routes/destinationRoutes');
 const EventRoutes = require('./routes/eventRoutes');
 const LocalBusinessRoutes = require('./routes/localBusinessRoutes');
 const BlogRoutes = require('./routes/blogRoutes');
-const AuthRoutes = require('./routes/authRoutes'); // Import the auth routes
+const AuthRoutes = require('./routes/authRoutes');
 
 // ✅ Register route middlewares with their respective endpoints
 app.use('/api/users', UserRoutes);
@@ -26,7 +34,7 @@ app.use('/api/destinations', DestinationRoutes);
 app.use('/api/events', EventRoutes);
 app.use('/api/businesses', LocalBusinessRoutes);
 app.use('/api/blogs', BlogRoutes);
-app.use('/api/auth', AuthRoutes); // Auth routes
+app.use('/api/auth', AuthRoutes);
 
 // ✅ Default root route
 app.get('/', (req, res) => {

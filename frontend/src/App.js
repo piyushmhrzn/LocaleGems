@@ -7,7 +7,7 @@ import Blogs from "./pages/blog";
 import About from "./pages/about";
 import Contact from "./pages/contact";
 import Login from "./pages/login";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile";
 import EventDetail from "./pages/eventDetail.jsx";
 import DestinationDetail from "./pages/destinationDetail.jsx";
 import BusinessRegistrationForm from "./pages/BusinessRegistrationForm.jsx";

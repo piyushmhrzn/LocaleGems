@@ -134,20 +134,22 @@ const updateUser = async (req, res) => {
         const { id } = req.params;
         const { firstname, lastname, email, phone, address, city, country } = req.body;
 
-        // Validate ObjectId
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ success: false, message: "Invalid User ID format" });
         }
 
-        // Ensure the user can only update their own profile
+        // Assuming req.user is a string (user ID) from authMiddleware
         if (req.user !== id) {
             return res.status(403).json({ success: false, message: "Unauthorized to update this profile" });
         }
 
-        // Update user
+        // Get image path if uploaded (store relative path)
+        const image = req.file ? `/uploads/${req.file.filename}` : undefined;
+
+        // Update user with image if provided
         const updatedUser = await User.findByIdAndUpdate(
             id,
-            { firstname, lastname, email, phone, address, city, country },
+            { firstname, lastname, email, phone, address, city, country, ...(image && { image }) },
             { new: true, runValidators: true }
         );
 
@@ -171,6 +173,7 @@ const updateUser = async (req, res) => {
         });
     }
 };
+
 
 /**
  * @desc    Delete a user
