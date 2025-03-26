@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/UserController');
+const { getUsers, getAllUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/UserController');
 
 const router = express.Router();
 
@@ -8,6 +8,12 @@ const router = express.Router();
  * @desc Fetch all users
  */
 router.get('/', getUsers);
+
+/**
+ * @route GET /api/users/all
+ * @desc Fetch all users
+ */
+router.get('/all', getUsers);
 
 /**
  * @route GET /api/users/:id

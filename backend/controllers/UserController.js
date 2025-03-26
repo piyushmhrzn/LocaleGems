@@ -28,6 +28,28 @@ const getUsers = async (req, res) => {
 };
 
 /**
+ * @desc    Get all users
+ * @route   GET /api/users/all
+ * @access  Public
+ */
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({
+            success: true,
+            message: "All users fetched successfully",
+            data: users
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+
+/**
  * @desc    Create a new user
  * @route   POST /api/users
  * @access  Public
@@ -195,6 +217,7 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
+    getAllUsers,
     getUsers, // Left public for now; adding authMiddleware if needed
     createUser, // Left public for now; adding authMiddleware if needed
     getUserById: [authMiddleware, getUserById],

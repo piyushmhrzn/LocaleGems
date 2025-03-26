@@ -55,6 +55,27 @@ const getEvents = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Get all events
+ * @route   GET /api/events/all
+ * @access  Public
+ */
+const getAllEvents = async (req, res) => {
+    try {
+        const events = await Event.find().populate("user_id destination_id");
+        res.status(200).json({
+            success: true,
+            message: "All events fetched successfully",
+            data: events
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
 
 /**
  * @desc    Get a single event by ID
@@ -232,6 +253,7 @@ const searchEvents = async (req, res) => {
 
 module.exports = {
     getEvents,
+    getAllEvents,
     getEventById,
     createEvent,
     updateEvent,

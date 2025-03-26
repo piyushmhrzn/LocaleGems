@@ -10,6 +10,12 @@ const router = express.Router();
 router.get('/', getEvents);
 
 /**
+ * @route GET /api/events/all
+ * @desc Get all events
+ */
+router.get('/all', getEvents);
+
+/**
  * @route POST /api/events
  * @desc Create a new event
  */
