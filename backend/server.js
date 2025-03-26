@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -20,6 +21,15 @@ if (!fs.existsSync('uploads')) {
 // Getting the port from .env file
 const PORT = process.env.PORT || 3000;
 
+// Nodemailer transporter setup (using Gmail SMTP)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
+
 // ✅ Import all route files
 const UserRoutes = require('./routes/userRoutes');
 const DestinationRoutes = require('./routes/destinationRoutes');
@@ -35,6 +45,43 @@ app.use('/api/events', EventRoutes);
 app.use('/api/businesses', LocalBusinessRoutes);
 app.use('/api/blogs', BlogRoutes);
 app.use('/api/auth', AuthRoutes);
+
+// Newsletter subscription route with email sending
+app.post('/api/newsletter/subscribe', async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+        return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
+    // Email options
+    const mailOptions = {
+        from: process.env.EMAIL_USER, // Sender address
+        to: email, // Subscriber's email
+        subject: "Welcome to LocaleGems Newsletter!",
+        text: `
+            Thank you for subscribing to LocaleGems!
+            Stay tuned for the latest updates on destinations, events, and travel tips straight to your inbox.
+            Explore hidden gems and local experiences with us!
+            - The LocaleGems Team
+        `,
+        html: `
+            <h3>Thank You for Subscribing to LocaleGems!</h3>
+            <p>Stay tuned for the latest updates on destinations, events, and travel tips straight to your inbox.</p>
+            <p>Explore hidden gems and local experiences with us!</p>
+            <p>- The LocaleGems Team</p>
+        `,
+    };
+
+    try {
+        // Send email
+        await transporter.sendMail(mailOptions);
+        console.log(`New newsletter subscription: ${email} - Email sent successfully`);
+        res.status(200).json({ success: true, message: "Subscribed successfully" });
+    } catch (error) {
+        console.error(`Error sending email to ${email}:`, error);
+        res.status(500).json({ success: false, message: "Failed to subscribe" });
+    }
+});
 
 // ✅ Default root route
 app.get('/', (req, res) => {
