@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import { ShopWindow, Compass, GlobeAmericas } from "react-bootstrap-icons";
 import NavBar from "../components/Navbar";
 import Banner from "../components/Banner";
@@ -19,34 +19,43 @@ const About = () => {
         backgroundImage="/images/about-banner.jpg"
       />
 
-      <Container className="my-5">
+      <Container className="my-5 text-center">
         {/* Our Mission */}
-        <Row className="mb-4">
-          <Col>
-            <h2>Our Mission</h2>
-            <p>
+        <Row className="align-items-center justify-content-center mb-5">
+          <Col md={6} className="text-start">
+            <h2 className="mb-4">🌍 Our Mission</h2>
+            <p className="lead">
               At <strong>LocaleGems</strong>, we aim to connect travelers with unique cultural experiences,
-              events, and destinations to provide a truly authentic and local travel journey.
-              We’re more than a platform—we’re a cultural connector that supports meaningful tourism and community growth.
+              events, and destinations for a truly authentic journey. We’re more than a platform—we’re a cultural connector that supports meaningful tourism and community growth.
             </p>
+          </Col>
+          <Col md={6}>
+            <Image
+              src="/images/travel-group.jpg"
+              fluid
+              rounded
+              className="shadow"
+              alt="Mission"
+              style={{ maxHeight: "400px", objectFit: "cover", width: "100%" }}
+            />
           </Col>
         </Row>
 
-        {/* Why LocaleGems - With Icon Cards */}
-        <Row className="mb-4">
-          <Col>
-            <h2>Why LocaleGems?</h2>
-            <p>We create value for all:</p>
+        {/* Why LocaleGems */}
+        <Container-fluid className="my-5 text-center">
+        <Row className="justify-content-center mb-5 bg-mute">
+          <Col md={10}>
+            <h2 className="mb-4">✨ Why LocaleGems?</h2>
+            <p className="mb-4">We create value for all:</p>
             <Row xs={1} md={3} className="g-4">
               {/* Local Communities */}
               <Col>
-                <Card className="h-100 text-center">
+                <Card className="h-100 text-center shadow border-0">
                   <Card.Body>
-                    <ShopWindow size={48} className="text-primary mb-3" /> {/* Replace <i> */}
-                    <Card.Title>For Local Communities</Card.Title>
+                    <ShopWindow size={48} className="text-primary mb-3" />
+                    <Card.Title>Local Communities</Card.Title>
                     <Card.Text>
-                      We help small businesses gain visibility and increase revenue through our platform,
-                      bringing them closer to travelers seeking local experiences.
+                      We help small businesses gain visibility and increase revenue through our platform.
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -54,13 +63,12 @@ const About = () => {
 
               {/* Travelers */}
               <Col>
-                <Card className="h-100 text-center">
+                <Card className="h-100 text-center shadow border-0">
                   <Card.Body>
-                    <Compass size={48} className="text-success mb-3" /> {/* Replace <i> */}
-                    <Card.Title>For Travelers</Card.Title>
+                    <Compass size={48} className="text-success mb-3" />
+                    <Card.Title>Travelers</Card.Title>
                     <Card.Text>
-                      We offer a reliable and easy-to-use space to discover and book genuine cultural experiences,
-                      tailored to individual interests and destinations.
+                      Discover and book authentic cultural experiences, tailored to your interests.
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -68,13 +76,12 @@ const About = () => {
 
               {/* Culture */}
               <Col>
-                <Card className="h-100 text-center">
+                <Card className="h-100 text-center shadow border-0">
                   <Card.Body>
-                    <GlobeAmericas size={48} className="text-warning mb-3" /> {/* Replace <i> */}
-                    <Card.Title>For Culture</Card.Title>
+                    <GlobeAmericas size={48} className="text-warning mb-3" />
+                    <Card.Title>Culture</Card.Title>
                     <Card.Text>
-                      We support the preservation and promotion of local traditions by enabling immersive tourism
-                      that celebrates heritage and identity.
+                      Support preservation and celebration of heritage through immersive travel.
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -82,16 +89,27 @@ const About = () => {
             </Row>
           </Col>
         </Row>
+        </Container-fluid>
 
         {/* Our Vision */}
-        <Row className="mb-4">
-          <Col>
-            <h2>Our Vision</h2>
-            <p>
+        <Row className="align-items-center justify-content-center my-5 flex-md-row-reverse">
+          <Col md={6} className="text-start">
+            <h2 className="mb-4">🚀 Our Vision</h2>
+            <p className="lead">
               We envision a world where every journey helps preserve culture and empower communities.
               With future features like multi-language support, event reminders, and gamification,
-              LocaleGems will make travel not just meaningful—but fun and personalized too. Get your journey started.
+              LocaleGems will make travel not just meaningful—but fun and personalized too.
             </p>
+          </Col>
+          <Col md={6}>
+            <Image
+              src="/images/vision-travel.jpg"
+              fluid
+              rounded
+              className="shadow"
+              alt="Vision"
+              style={{ maxHeight: "400px", objectFit: "cover", width: "100%" }}
+            />
           </Col>
         </Row>
       </Container>
