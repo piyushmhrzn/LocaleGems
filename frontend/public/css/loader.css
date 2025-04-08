@@ -1,0 +1,83 @@
+.fancy-loader {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #007bff, #00d4ff);
+    /* Gradient from blue to cyan */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.5);
+    /* Glow effect */
+    animation: orbit 2s linear infinite;
+}
+
+.dot1 {
+    transform: rotate(0deg) translate(40px);
+    animation-delay: 0s;
+}
+
+.dot2 {
+    transform: rotate(72deg) translate(40px);
+    animation-delay: -0.4s;
+}
+
+.dot3 {
+    transform: rotate(144deg) translate(40px);
+    animation-delay: -0.8s;
+}
+
+.dot4 {
+    transform: rotate(216deg) translate(40px);
+    animation-delay: -1.2s;
+}
+
+.dot5 {
+    transform: rotate(288deg) translate(40px);
+    animation-delay: -1.6s;
+}
+
+@keyframes orbit {
+    0% {
+        transform: rotate(0deg) translate(40px) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: rotate(180deg) translate(40px) scale(1.2);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: rotate(360deg) translate(40px) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Center the text below the loader */
+.fancy-loader+p {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #666;
+    animation: fade 1.5s ease-in-out infinite;
+}
+
+@keyframes fade {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}

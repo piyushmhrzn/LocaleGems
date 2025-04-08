@@ -13,6 +13,7 @@ import { FaStar, FaShare } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
 import { useTranslation } from "react-i18next";
+import Loader from "../components/Loader";
 
 const containerStyle = { width: "100%", height: "400px" };
 const BASE_URL = "http://localhost:3000";
@@ -89,7 +90,7 @@ const EventDetail = () => {
         }
     };
 
-    if (loading) return <div>{t("Loading...")}</div>;
+    if (loading) return <Loader />;
     if (!event) return <div>{t("Event not found")}</div>;
 
     const eventDate = moment(event.date).format("MMMM Do YYYY, h:mm A");

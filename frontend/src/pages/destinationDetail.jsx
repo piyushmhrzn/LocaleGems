@@ -11,6 +11,7 @@ import { FaCoffee, FaUtensils, FaShoppingBag, FaCalendarAlt, FaStar, FaShare } f
 import { AppContext } from "../context/AppContext";
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
 import { useTranslation } from "react-i18next";
+import Loader from "../components/Loader";
 
 const containerStyle = { width: "100%", height: "400px" };
 const BASE_URL = "http://localhost:3000";
@@ -106,7 +107,7 @@ const DestinationDetail = () => {
         }
     };
 
-    if (loading) return <div>{t("Loading...")}</div>;
+    if (loading) return <Loader />;
     if (!destination) return <div>{t("Destination not found")}</div>;
 
     const center = {
