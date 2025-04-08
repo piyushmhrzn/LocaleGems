@@ -96,6 +96,37 @@ exports.getDestinationById = async (req, res) => {
     }
 };
 
+
+/**
+ * @desc    Fetch destination by slug (for public)
+ * @route   POST /api/destinations/slug/:slug
+ * @access  Public
+ */
+exports.getDestinationBySlug = async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const destination = await Destination.findOne({ slug });
+        if (!destination) {
+            return res.status(404).json({
+                success: false,
+                message: "Destination not found",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Destination fetched successfully",
+            data: destination,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
 /**
  * @desc    Create a new destination
  * @route   POST /api/destinations
@@ -260,6 +291,7 @@ module.exports = {
     getDestinations: exports.getDestinations,
     getAllDestinations: [authMiddleware, exports.getAllDestinations], // Admin-specific
     getDestinationById: exports.getDestinationById,
+    getDestinationBySlug: exports.getDestinationBySlug,
     createDestination: exports.createDestination,
     updateDestination: [authMiddleware, exports.updateDestination],
     deleteDestination: [authMiddleware, exports.deleteDestination],

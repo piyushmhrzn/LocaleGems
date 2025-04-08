@@ -1,5 +1,13 @@
 const express = require('express');
-const { getEvents, createEvent, getEventById, updateEvent, deleteEvent, searchEvents } = require('../controllers/EventController');
+const {
+    getEvents,
+    createEvent,
+    getEventById,
+    getEventBySlug,
+    updateEvent,
+    deleteEvent,
+    searchEvents
+} = require('../controllers/EventController');
 
 const router = express.Router();
 
@@ -32,6 +40,12 @@ router.get('/search', searchEvents);
  * @desc Get a single event by ID
  */
 router.get('/:id', getEventById);
+
+/**
+ * @route GET /api/events/slug/:slug
+ * @desc Get a single event by slug (for public)
+ */
+router.get("/slug/:slug", getEventBySlug);
 
 /**
  * @route PUT /api/events/:id

@@ -117,6 +117,38 @@ const getEventById = async (req, res) => {
 
 
 /**
+ * @desc    Fetch an event by slug (for public)
+ * @route   GET /api/events/slug/:slug
+ * @access  Public
+ */
+const getEventBySlug = async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const event = await Event.findOne({ slug })
+            .populate("destination_id", "name slug")
+            .populate("user_id", "firstname lastname");
+        if (!event) {
+            return res.status(404).json({
+                success: false,
+                message: "Event not found",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Event fetched successfully",
+            data: event,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
+/**
  * @desc    Create a new event
  * @route   POST /api/events
  * @access  Public
@@ -255,6 +287,7 @@ module.exports = {
     getEvents,
     getAllEvents,
     getEventById,
+    getEventBySlug,
     createEvent,
     updateEvent,
     deleteEvent,

@@ -26,17 +26,14 @@ const Events = () => {
         setLocation(locationQuery);
 
         fetchEvents({ search: searchQuery, location: locationQuery });
-    }, [currentLocation.search]); // Run when URL changes
+    }, [currentLocation.search]);
 
     const handleSearch = () => {
         const queryParams = new URLSearchParams();
         if (search) queryParams.set("search", search);
         if (location) queryParams.set("location", location);
 
-        // Update browser URL
         navigate(`/events?${queryParams.toString()}`);
-
-        // Fetch updated events
         fetchEvents({ search, location });
     };
 
@@ -51,7 +48,6 @@ const Events = () => {
             <Container>
                 <h2 className="mt-4">Events</h2>
 
-                {/* Search & Filter Section */}
                 <Form className="mb-4">
                     <Row>
                         <Col md={4}>
@@ -78,7 +74,6 @@ const Events = () => {
                     </Row>
                 </Form>
 
-                {/* Events Display */}
                 {loading ? (
                     <p>Loading events...</p>
                 ) : (
@@ -86,7 +81,7 @@ const Events = () => {
                         {events.length > 0 ? (
                             events.map((event) => (
                                 <Col key={event._id} md={4}>
-                                    <Link to={`/events/${event._id}`} style={{ textDecoration: "none" }}>
+                                    <Link to={`/events/${event.slug}`} style={{ textDecoration: "none" }}>
                                         <Card data={event} type="event" />
                                     </Link>
                                 </Col>

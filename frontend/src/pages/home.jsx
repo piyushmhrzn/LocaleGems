@@ -14,9 +14,7 @@ import { useTranslation } from "react-i18next";
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { events } = useContext(AppContext);
-  const { destinations } = useContext(AppContext);
-  const { blogs } = useContext(AppContext);
+  const { events, destinations, blogs } = useContext(AppContext);
 
   return (
     <>
@@ -46,7 +44,7 @@ const Home = () => {
           <Row>
             {events.map(event => (
               <Col key={event._id} md={6}>
-                <Link to={`/events/${event._id}`} style={{ textDecoration: "none" }}>
+                <Link to={`/events/${event.slug}`} style={{ textDecoration: "none" }}>
                   <EventCard data={event} /> {/* Use EventCard */}
                 </Link>
               </Col>
@@ -71,7 +69,7 @@ const Home = () => {
           <Row>
             {destinations.map(destination => (
               <Col key={destination._id} md={4}>
-                <Link to={`/destinations/${destination._id}`} style={{ textDecoration: "none" }}>
+                <Link to={`/destinations/${destination.slug}`} style={{ textDecoration: "none" }}>
                   <Card data={destination} type="destination" />
                 </Link>
               </Col>

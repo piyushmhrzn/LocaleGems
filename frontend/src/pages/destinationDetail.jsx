@@ -17,9 +17,9 @@ const BASE_URL = "http://localhost:3000";
 
 const DestinationDetail = () => {
     const { t } = useTranslation();
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
-    const { user } = useContext(AppContext);
+    const { user, fetchDestinationsBySlug } = useContext(AppContext);
     const [destination, setDestination] = useState(null);
     const [businesses, setBusinesses] = useState([]);
     const [events, setEvents] = useState([]);
@@ -32,27 +32,32 @@ const DestinationDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [destinationRes, businessRes, eventRes, ratingRes, commentRes] = await Promise.all([
-                    axios.get(`http://localhost:3000/api/destinations/${id}`),
-                    axios.get(`http://localhost:3000/api/businesses/all`),
-                    axios.get(`http://localhost:3000/api/events`),
-                    axios.get(`http://localhost:3000/api/ratings/destination/${id}`),
-                    axios.get(`http://localhost:3000/api/comments/destination/${id}`),
+                const destinationData = await fetchDestinationsBySlug(slug); // Use new context function
+                setDestination(destinationData);
+
+                const [businessRes, eventRes, ratingRes, commentRes] = await Promise.all([
+                    axios.get(`${BASE_URL}/api/businesses/all`),
+                    axios.get(`${BASE_URL}/api/events`),
+                    axios.get(`${BASE_URL}/api/ratings/destination/${destinationData._id}`), // Use ID internally
+                    axios.get(`${BASE_URL}/api/comments/destination/${destinationData._id}`),
                 ]);
 
-                setDestination(destinationRes.data.data);
                 const allBusinesses = businessRes.data.data;
                 const allEvents = eventRes.data.data;
                 setRatings(ratingRes.data.data);
                 setComments(commentRes.data.data);
 
-                const relatedBusinesses = allBusinesses.filter(business => {
-                    const destId = business.destination_id?._id ? business.destination_id._id.toString() : business.destination_id?.toString();
-                    return destId === id;
+                const relatedBusinesses = allBusinesses.filter((business) => {
+                    const destId = business.destination_id?._id
+                        ? business.destination_id._id.toString()
+                        : business.destination_id?.toString();
+                    return destId === destinationData._id;
                 });
-                const relatedEvents = allEvents.filter(event => {
-                    const destId = event.destination_id?._id ? event.destination_id._id.toString() : event.destination_id?.toString();
-                    return destId === id;
+                const relatedEvents = allEvents.filter((event) => {
+                    const destId = event.destination_id?._id
+                        ? event.destination_id._id.toString()
+                        : event.destination_id?.toString();
+                    return destId === destinationData._id;
                 });
 
                 setBusinesses(relatedBusinesses);
@@ -64,7 +69,7 @@ const DestinationDetail = () => {
             }
         };
         fetchData();
-    }, [id]);
+    }, [slug, fetchDestinationsBySlug]);
 
     const handleRating = async () => {
         if (!user) return alert(t("Please log in to rate this destination."));
@@ -72,7 +77,7 @@ const DestinationDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 "http://localhost:3000/api/ratings",
-                { destination_id: id, rating: userRating },
+                { destination_id: destination._id, rating: userRating }, // Use _id internally
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setRatings([...ratings, { user_id: user, rating: userRating }]);
@@ -90,7 +95,7 @@ const DestinationDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 "http://localhost:3000/api/comments",
-                { destination_id: id, comment: userComment },
+                { destination_id: destination._id, comment: userComment }, // Use _id internally
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setComments([...comments, { user_id: user, comment: userComment }]);
@@ -111,24 +116,34 @@ const DestinationDetail = () => {
 
     const getBusinessIcon = (type) => {
         switch (type) {
-            case "Cafes": return <FaCoffee className="me-2" style={{ color: "#d4a373" }} />;
-            case "Restaurants": return <FaUtensils className="me-2" style={{ color: "#e63946" }} />;
-            case "Souvenir Shops": return <FaShoppingBag className="me-2" style={{ color: "#457b9d" }} />;
-            default: return null;
+            case "Cafes":
+                return <FaCoffee className="me-2" style={{ color: "#d4a373" }} />;
+            case "Restaurants":
+                return <FaUtensils className="me-2" style={{ color: "#e63946" }} />;
+            case "Souvenir Shops":
+                return <FaShoppingBag className="me-2" style={{ color: "#457b9d" }} />;
+            default:
+                return null;
         }
     };
 
-    const averageRating = ratings.length ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : t("No ratings yet");
-    const shareUrl = `${window.location.origin}/destinations/${id}`;
+    const averageRating = ratings.length
+        ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
+        : t("No ratings yet");
+    const shareUrl = `${window.location.origin}/destinations/${destination.slug}`; // Updated to slug
     const shareTitle = `${destination.name} - ${destination.city}, ${destination.country}`;
     const shareDescription = destination.short_description;
 
-    const reviews = ratings.map(r => {
-        const comment = comments.find(c => c.user_id._id === r.user_id._id);
-        return { ...r, comment: comment?.comment };
-    }).concat(
-        comments.filter(c => !ratings.some(r => r.user_id._id === c.user_id._id)).map(c => ({ user_id: c.user_id, comment: c.comment }))
-    );
+    const reviews = ratings
+        .map((r) => {
+            const comment = comments.find((c) => c.user_id._id === r.user_id._id);
+            return { ...r, comment: comment?.comment };
+        })
+        .concat(
+            comments
+                .filter((c) => !ratings.some((r) => r.user_id._id === c.user_id._id))
+                .map((c) => ({ user_id: c.user_id, comment: c.comment }))
+        );
 
     return (
         <>
@@ -140,7 +155,6 @@ const DestinationDetail = () => {
                 height="50vh"
                 overlayOpacity={0.3}
             />
-
             <Container className="py-5">
                 <Row className="mb-5">
                     <Col md={6}>
@@ -149,7 +163,6 @@ const DestinationDetail = () => {
                         <p><strong>{t("City")}:</strong> {destination.city}</p>
                         <p><strong>{t("Country")}:</strong> {destination.country}</p>
                         <p className="text-muted">{destination.long_description}</p>
-                        {/* Social Sharing Buttons */}
                         <div className="mt-5">
                             <h5 className="text-primary">{t("Share this Destination")}</h5>
                             <div className="d-flex gap-2">
@@ -182,15 +195,15 @@ const DestinationDetail = () => {
                         <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
                                 <Marker position={center} label={destination.name} />
-                                {businesses.map(b => (
-                                    b.coordinates && (
+                                {businesses.map((b) =>
+                                    b.coordinates ? (
                                         <Marker
                                             key={b._id}
                                             position={{ lat: b.coordinates.coordinates[1], lng: b.coordinates.coordinates[0] }}
                                             label={b.name}
                                         />
-                                    )
-                                ))}
+                                    ) : null
+                                )}
                             </GoogleMap>
                         </LoadScript>
                     </Col>
@@ -200,7 +213,7 @@ const DestinationDetail = () => {
                     <Col>
                         <h3 className="mb-2 fw-bold text-primary">{t("Rate this Destination")}</h3>
                         <div>
-                            {[1, 2, 3, 4, 5].map(star => (
+                            {[1, 2, 3, 4, 5].map((star) => (
                                 <FaStar
                                     key={star}
                                     size={30}
@@ -256,7 +269,11 @@ const DestinationDetail = () => {
                                 <div key={index} className="mb-4">
                                     <div className="d-flex align-items-center">
                                         <img
-                                            src={review.user_id.image ? `${BASE_URL}${review.user_id.image}` : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"}
+                                            src={
+                                                review.user_id.image
+                                                    ? `${BASE_URL}${review.user_id.image}`
+                                                    : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
+                                            }
                                             alt={`${review.user_id.firstname} ${review.user_id.lastname}`}
                                             className="rounded-circle me-2"
                                             style={{ width: "50px", height: "50px", objectFit: "cover" }}
@@ -293,17 +310,18 @@ const DestinationDetail = () => {
                             <p>{t("No businesses found for this destination.")}</p>
                         ) : (
                             <Row>
-                                {businesses.map(business => (
+                                {businesses.map((business) => (
                                     <Col key={business._id} md={4} className="mb-4">
                                         <img
-                                            src={business.image || "https://images.pexels.com/photos/235985/pexels-photo-235985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}
+                                            src={
+                                                business.image ||
+                                                "https://images.pexels.com/photos/235985/pexels-photo-235985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                            }
                                             alt={business.name}
                                             className="img-fluid rounded"
                                             style={{ width: "100%", height: "auto" }}
                                         />
-                                        <h5 className="mt-2">
-                                            {getBusinessIcon(business.type)}{business.name}
-                                        </h5>
+                                        <h5 className="mt-2">{getBusinessIcon(business.type)}{business.name}</h5>
                                         <p className="text-muted">{business.proximity_to_destination} km away</p>
                                     </Col>
                                 ))}
@@ -319,7 +337,7 @@ const DestinationDetail = () => {
                             <p>{t("No events found for this destination.")}</p>
                         ) : (
                             <Row>
-                                {events.map(event => (
+                                {events.map((event) => (
                                     <Col key={event._id} md={4} className="mb-4">
                                         <img
                                             src={event.image || "https://via.placeholder.com/150"}

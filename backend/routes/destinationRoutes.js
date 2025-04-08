@@ -1,5 +1,14 @@
 const express = require('express');
-const { getDestinations, getAllDestinations, getDestinationById, createDestination, updateDestination, deleteDestination, searchDestinations } = require('../controllers/DestinationController');
+const {
+    getDestinations,
+    getAllDestinations,
+    getDestinationById,
+    getDestinationBySlug,
+    createDestination,
+    updateDestination,
+    deleteDestination,
+    searchDestinations
+} = require('../controllers/DestinationController');
 
 const router = express.Router();
 
@@ -36,6 +45,13 @@ router.get('/search', searchDestinations);
  * @access  Public
  */
 router.get('/:id', getDestinationById);
+
+/**
+ * @route   GET /api/destinations/slug/:slug
+ * @desc    Fetch a single destination by slug (for public)
+ * @access  Public
+ */
+router.get("/slug/:slug", getDestinationBySlug);
 
 /**
  * @route   PUT /api/destinations/:id

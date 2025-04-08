@@ -60,17 +60,11 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-        const token = localStorage.getItem("authToken");
-        if (token) fetchUser(token);
-    }, []);
-
     const fetchEvents = async (filters = {}) => {
         setLoading(true);
         try {
             const queryParams = new URLSearchParams(filters).toString();
-            console.log("Fetching events with filters:", queryParams); // Debugging line
+            console.log("Fetching events with filters:", queryParams);
             const response = await axios.get(`${baseURL}/events?${queryParams}`);
             setEvents(response.data.data);
         } catch (error) {
@@ -93,11 +87,44 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    // New slug-based functions
+    const fetchDestinationsBySlug = async (slug) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${baseURL}/destinations/slug/${slug}`);
+            return response.data.data; // Return single destination
+        } catch (err) {
+            console.error("Error fetching destination by slug:", err);
+            throw err; // Let the caller handle the error
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchEventsBySlug = async (slug) => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${baseURL}/events/slug/${slug}`);
+            return response.data.data; // Return single event
+        } catch (err) {
+            console.error("Error fetching event by slug:", err);
+            throw err; // Let the caller handle the error
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem("authToken");
         setUser(null);
         window.location.href = "/login";
     };
+
+    useEffect(() => {
+        fetchData();
+        const token = localStorage.getItem("authToken");
+        if (token) fetchUser(token);
+    }, []);
 
     return (
         <AppContext.Provider
@@ -114,8 +141,11 @@ export const AppProvider = ({ children }) => {
                 logout,
                 loading,
                 fetchEvents,
-                fetchBusinesses
-            }}>
+                fetchBusinesses,
+                fetchDestinationsBySlug,
+                fetchEventsBySlug,
+            }}
+        >
             {children}
         </AppContext.Provider>
     );

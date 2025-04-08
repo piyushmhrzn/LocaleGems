@@ -19,9 +19,9 @@ const BASE_URL = "http://localhost:3000";
 
 const EventDetail = () => {
     const { t } = useTranslation();
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
-    const { user } = useContext(AppContext);
+    const { user, fetchEventsBySlug } = useContext(AppContext);
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [relatedEvents, setRelatedEvents] = useState([]);
@@ -33,20 +33,18 @@ const EventDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [eventRes, ratingRes, commentRes] = await Promise.all([
-                    axios.get(`http://localhost:3000/api/events/${id}`),
-                    axios.get(`http://localhost:3000/api/ratings/event/${id}`),
-                    axios.get(`http://localhost:3000/api/comments/event/${id}`),
+                const eventData = await fetchEventsBySlug(slug); // Use new context function
+                setEvent(eventData);
+
+                const [ratingRes, commentRes, relatedRes] = await Promise.all([
+                    axios.get(`${BASE_URL}/api/ratings/event/${eventData._id}`), // Use ID internally
+                    axios.get(`${BASE_URL}/api/comments/event/${eventData._id}`),
+                    axios.get(`${BASE_URL}/api/events?destination_id=${eventData.destination_id._id || eventData.destination_id}`),
                 ]);
 
-                setEvent(eventRes.data.data);
                 setRatings(ratingRes.data.data);
                 setComments(commentRes.data.data);
-
-                const destinationId = eventRes.data.data.destination_id;
-                const relatedRes = await axios.get(`http://localhost:3000/api/events?destination_id=${destinationId}`);
-                setRelatedEvents(relatedRes.data.data.filter(e => e._id !== id));
-
+                setRelatedEvents(relatedRes.data.data.filter((e) => e._id !== eventData._id));
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -54,7 +52,7 @@ const EventDetail = () => {
             }
         };
         fetchData();
-    }, [id]);
+    }, [slug, fetchEventsBySlug]);
 
     const handleRating = async () => {
         if (!user) return alert(t("Please log in to rate this event."));
@@ -62,7 +60,7 @@ const EventDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 "http://localhost:3000/api/ratings",
-                { event_id: id, rating: userRating },
+                { event_id: event._id, rating: userRating }, // Use _id internally
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setRatings([...ratings, { user_id: user, rating: userRating }]);
@@ -80,7 +78,7 @@ const EventDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 "http://localhost:3000/api/comments",
-                { event_id: id, comment: userComment },
+                { event_id: event._id, comment: userComment }, // Use _id internally
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setComments([...comments, { user_id: user, comment: userComment }]);
@@ -99,17 +97,23 @@ const EventDetail = () => {
     const lat = parseFloat(locationParts[0]);
     const lng = parseFloat(locationParts[1]);
     const center = { lat: isNaN(lat) ? 0 : lat, lng: isNaN(lng) ? 0 : lng };
-    const averageRating = ratings.length ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : t("No ratings yet");
-    const shareUrl = `${window.location.origin}/events/${id}`;
+    const averageRating = ratings.length
+        ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
+        : t("No ratings yet");
+    const shareUrl = `${window.location.origin}/events/${event.slug}`; // Updated to slug
     const shareTitle = `${event.name} - ${eventDate}`;
     const shareDescription = `Join me at ${event.name} on ${eventDate} at ${event.location}!`;
 
-    const reviews = ratings.map(r => {
-        const comment = comments.find(c => c.user_id._id === r.user_id._id);
-        return { ...r, comment: comment?.comment };
-    }).concat(
-        comments.filter(c => !ratings.some(r => r.user_id._id === c.user_id._id)).map(c => ({ user_id: c.user_id, comment: c.comment }))
-    );
+    const reviews = ratings
+        .map((r) => {
+            const comment = comments.find((c) => c.user_id._id === r.user_id._id);
+            return { ...r, comment: comment?.comment };
+        })
+        .concat(
+            comments
+                .filter((c) => !ratings.some((r) => r.user_id._id === c.user_id._id))
+                .map((c) => ({ user_id: c.user_id, comment: c.comment }))
+        );
 
     return (
         <>
@@ -121,7 +125,6 @@ const EventDetail = () => {
                 height="60vh"
                 overlayOpacity={0.3}
             />
-
             <Container className="py-5">
                 <Row className="mb-5">
                     <Col md={6}>
@@ -146,12 +149,13 @@ const EventDetail = () => {
                             date={event.date}
                             renderer={({ days, hours, minutes, seconds }) => (
                                 <h4 className="fw-bold text-danger">
-                                    {days} <span className="text-dark">{t("days")}</span> {hours} <span className="text-dark">{t("hrs")}</span>
-                                    {minutes} <span className="text-dark">{t("min")}</span> {seconds} <span className="text-dark">{t("sec")}</span>
+                                    {days} <span className="text-dark">{t("days")}</span> {hours}{" "}
+                                    <span className="text-dark">{t("hrs")}</span> {minutes}{" "}
+                                    <span className="text-dark">{t("min")}</span> {seconds}{" "}
+                                    <span className="text-dark">{t("sec")}</span>
                                 </h4>
                             )}
                         />
-                        {/* Social Sharing Buttons */}
                         <div className="mt-5 mb-5">
                             <h5 className="text-primary">{t("Share this Event")}</h5>
                             <div className="d-flex gap-2">
@@ -206,7 +210,7 @@ const EventDetail = () => {
                     <Col>
                         <h3 className="mb-2 fw-bold text-primary">{t("Rate this Event")}</h3>
                         <div>
-                            {[1, 2, 3, 4, 5].map(star => (
+                            {[1, 2, 3, 4, 5].map((star) => (
                                 <FaStar
                                     key={star}
                                     size={30}
@@ -262,7 +266,11 @@ const EventDetail = () => {
                                 <div key={index} className="mb-4">
                                     <div className="d-flex align-items-center">
                                         <img
-                                            src={review.user_id.image ? `${BASE_URL}${review.user_id.image}` : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"}
+                                            src={
+                                                review.user_id.image
+                                                    ? `${BASE_URL}${review.user_id.image}`
+                                                    : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
+                                            }
                                             alt={`${review.user_id.firstname} ${review.user_id.lastname}`}
                                             className="rounded-circle me-2"
                                             style={{ width: "50px", height: "50px", objectFit: "cover" }}
@@ -308,7 +316,7 @@ const EventDetail = () => {
                                             label={t("View Details")}
                                             variant="dark"
                                             size="md"
-                                            onClick={() => navigate(`/events/${related._id}`)}
+                                            onClick={() => navigate(`/events/${related.slug}`)} // Updated to slug
                                         />
                                     </Card.Body>
                                 </Card>

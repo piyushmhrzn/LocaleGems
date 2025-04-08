@@ -10,18 +10,17 @@ import { useTranslation } from "react-i18next";
 
 const Destinations = () => {
   const { t } = useTranslation();
-
   const {
     destinations,
     fetchDestinations,
     currentDestinationPage,
     totalDestinationPages,
-    loading
+    loading,
   } = useContext(AppContext);
 
   useEffect(() => {
     fetchDestinations(currentDestinationPage); // Load destinations when component mounts
-  }, []);
+  }, [currentDestinationPage]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalDestinationPages) {
@@ -32,13 +31,11 @@ const Destinations = () => {
   return (
     <>
       <NavBar />
-
       <Banner
         heading={t("Hidden Destinations you must visit")}
         subheading={t("We bring you all the hidden treasures from around the world")}
         backgroundImage="/images/destination-banner.jpg"
       />
-
       <Container>
         <h2 className="mt-4">Hidden Destinations</h2>
 
@@ -47,9 +44,9 @@ const Destinations = () => {
         ) : (
           <>
             <Row className="mb-5">
-              {destinations.map(destination => (
+              {destinations.map((destination) => (
                 <Col key={destination._id} md={4}>
-                  <Link to={`/destinations/${destination._id}`} style={{ textDecoration: "none" }}>
+                  <Link to={`/destinations/${destination.slug}`} style={{ textDecoration: "none" }}>
                     <Card data={destination} type="destination" />
                   </Link>
                 </Col>
@@ -65,11 +62,9 @@ const Destinations = () => {
               >
                 Previous
               </Button>
-
               <span className="mx-3 align-self-center">
                 Page {currentDestinationPage} of {totalDestinationPages}
               </span>
-
               <Button
                 variant="primary"
                 disabled={currentDestinationPage === totalDestinationPages}
@@ -81,7 +76,6 @@ const Destinations = () => {
           </>
         )}
       </Container>
-
       <Footer />
     </>
   );
