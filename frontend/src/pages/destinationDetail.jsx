@@ -4,7 +4,7 @@ import axios from "axios";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Banner from "../components/Banner";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Carousel } from "react-bootstrap";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import CustomButton from "../components/Button";
 import { FaCoffee, FaUtensils, FaShoppingBag, FaCalendarAlt, FaStar, FaShare } from "react-icons/fa";
@@ -209,6 +209,27 @@ const DestinationDetail = () => {
                         </LoadScript>
                     </Col>
                 </Row>
+
+                {/* Image Gallery */}
+                {destination.imageGallery?.length > 0 && (
+                    <Row className="mb-5">
+                        <Col>
+                            <h3 className="mb-3 fw-bold text-primary">{t("Gallery")}</h3>
+                            <Carousel>
+                                {destination.imageGallery.map((img, index) => (
+                                    <Carousel.Item key={index}>
+                                        <img
+                                            className="d-block w-100"
+                                            src={img || "https://via.placeholder.com/600x400"}
+                                            alt={`${destination.name} - Image ${index + 1}`}
+                                            style={{ height: "400px", objectFit: "cover" }}
+                                        />
+                                    </Carousel.Item>
+                                ))}
+                            </Carousel>
+                        </Col>
+                    </Row>
+                )}
 
                 <Row className="mb-5">
                     <Col>

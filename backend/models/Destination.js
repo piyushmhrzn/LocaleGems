@@ -5,6 +5,7 @@ const DestinationSchema = new mongoose.Schema({
     name: { type: String, required: true },
     slug: { type: String, unique: true, required: true },
     image: { type: String },
+    imageGallery: [{ type: String }],
     location: { type: String, required: true },
     coordinates: {
         type: { type: String, enum: ["Point"], default: "Point" },

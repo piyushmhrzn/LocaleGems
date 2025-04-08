@@ -134,7 +134,17 @@ exports.getDestinationBySlug = async (req, res) => {
  */
 exports.createDestination = async (req, res) => {
     try {
-        const { name, image, location, coordinates, city, country, short_description, long_description } = req.body;
+        const {
+            name,
+            image,
+            location,
+            coordinates,
+            city,
+            country,
+            short_description,
+            long_description,
+            imageGallery,
+        } = req.body;
 
         // Validate coordinates
         if (!coordinates || !Array.isArray(coordinates.coordinates) || coordinates.coordinates.length !== 2) {
@@ -152,7 +162,9 @@ exports.createDestination = async (req, res) => {
             city,
             country,
             short_description,
-            long_description
+            long_description,
+            imageGallery: imageGallery || [], // Default to empty array if not provided
+            slug,
         });
         await newDestination.save();
 

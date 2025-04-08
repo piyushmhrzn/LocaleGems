@@ -3,6 +3,7 @@ const slugify = require("slugify");
 
 const EventSchema = new mongoose.Schema({
     image: { type: String },
+    imageGallery: [{ type: String }],
     destination_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Destination",

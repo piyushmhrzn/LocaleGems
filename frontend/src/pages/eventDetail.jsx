@@ -198,6 +198,28 @@ const EventDetail = () => {
 
                 <Row className="mb-5">
                     <Col md={6}>
+                        {/* Image Gallery */}
+                        {event.imageGallery?.length > 0 && (
+                            <Row className="mb-5">
+                                <Col md={12}>
+                                    <h3 className="mb-3 fw-bold text-primary">{t("Gallery")}</h3>
+                                    <Carousel>
+                                        {event.imageGallery.map((img, index) => (
+                                            <Carousel.Item key={index}>
+                                                <img
+                                                    className="d-block w-100"
+                                                    src={img || "https://via.placeholder.com/600x300"}
+                                                    alt={`${event.name} - Image ${index + 1}`}
+                                                    style={{ height: "300px", objectFit: "cover" }}
+                                                />
+                                            </Carousel.Item>
+                                        ))}
+                                    </Carousel>
+                                </Col>
+                            </Row>
+                        )}
+                    </Col>
+                    <Col md={6}>
                         <h3 className="fw-bold text-primary">{t("Explore on Map")}</h3>
                         <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
                             <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
