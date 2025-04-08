@@ -14,8 +14,9 @@ import BusinessRegistrationForm from "./pages/BusinessRegistrationForm.jsx";
 import BusinessInfo from "./pages/businessInfo.jsx";
 import AdminPanel from "./pages/adminpanel.jsx";
 import AdminLogin from "./pages/adminlogin.jsx";
+import NotFound from "./pages/NotFound.jsx";
 import { AppProvider } from "./context/AppContext";
-import { jwtDecode } from "jwt-decode"; // Add jwt-decode
+import { jwtDecode } from "jwt-decode";
 
 const ProtectedAdminRoute = ({ element }) => {
   const token = localStorage.getItem("authToken");
@@ -48,7 +49,7 @@ const App = () => {
           <Route path="/BusinessInfo" element={<BusinessInfo />} />
           <Route path="/adminLogin" element={<AdminLogin />} />
           <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPanel />} />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </AppProvider>
