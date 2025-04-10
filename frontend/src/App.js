@@ -17,6 +17,7 @@ import AdminLogin from "./pages/adminlogin.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import { AppProvider } from "./context/AppContext";
 import { jwtDecode } from "jwt-decode";
+import { LoadScript } from "@react-google-maps/api";
 
 const ProtectedAdminRoute = ({ element }) => {
   const token = localStorage.getItem("authToken");
@@ -32,27 +33,29 @@ const ProtectedAdminRoute = ({ element }) => {
 
 const App = () => {
   return (
-    <AppProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/events/:slug" element={<EventDetail />} />
-          <Route path="/destinations" element={<Destinations />} />
-          <Route path="/destinations/:slug" element={<DestinationDetail />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/BusinessRegistrationForm" element={<BusinessRegistrationForm />} />
-          <Route path="/BusinessInfo" element={<BusinessInfo />} />
-          <Route path="/adminLogin" element={<AdminLogin />} />
-          <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPanel />} />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </AppProvider>
+    <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
+      <AppProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/events/:slug" element={<EventDetail />} />
+            <Route path="/destinations" element={<Destinations />} />
+            <Route path="/destinations/:slug" element={<DestinationDetail />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/BusinessRegistrationForm" element={<BusinessRegistrationForm />} />
+            <Route path="/BusinessInfo" element={<BusinessInfo />} />
+            <Route path="/adminLogin" element={<AdminLogin />} />
+            <Route path="/admin" element={<ProtectedAdminRoute element={<AdminPanel />} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </AppProvider>
+    </LoadScript >
   );
 };
 

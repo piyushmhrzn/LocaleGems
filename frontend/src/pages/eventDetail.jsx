@@ -5,7 +5,7 @@ import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Banner from "../components/Banner";
 import { Container, Row, Col, Badge, Card, Carousel, Form } from "react-bootstrap";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import CustomButton from "../components/Button";
 import Countdown from "react-countdown";
 import moment from "moment";
@@ -16,7 +16,8 @@ import { useTranslation } from "react-i18next";
 import Loader from "../components/Loader";
 
 const containerStyle = { width: "100%", height: "400px" };
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
+const DEFAULT_CENTER = { lat: 39.8283, lng: -98.5795 }; // Central USA fallback
 
 const EventDetail = () => {
     const { t } = useTranslation();
@@ -34,11 +35,11 @@ const EventDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const eventData = await fetchEventsBySlug(slug); // Use new context function
+                const eventData = await fetchEventsBySlug(slug);
                 setEvent(eventData);
 
                 const [ratingRes, commentRes, relatedRes] = await Promise.all([
-                    axios.get(`${BASE_URL}/api/ratings/event/${eventData._id}`), // Use ID internally
+                    axios.get(`${BASE_URL}/api/ratings/event/${eventData._id}`),
                     axios.get(`${BASE_URL}/api/comments/event/${eventData._id}`),
                     axios.get(`${BASE_URL}/api/events?destination_id=${eventData.destination_id._id || eventData.destination_id}`),
                 ]);
@@ -61,7 +62,7 @@ const EventDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 `${BASE_URL}/api/ratings`,
-                { event_id: event._id, rating: userRating }, // Use _id internally
+                { event_id: event._id, rating: userRating },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setRatings([...ratings, { user_id: user, rating: userRating }]);
@@ -79,7 +80,7 @@ const EventDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 `${BASE_URL}/api/comments`,
-                { event_id: event._id, comment: userComment }, // Use _id internally
+                { event_id: event._id, comment: userComment },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setComments([...comments, { user_id: user, comment: userComment }]);
@@ -94,16 +95,27 @@ const EventDetail = () => {
     if (!event) return <div>{t("Event not found")}</div>;
 
     const eventDate = moment(event.date).format("MMMM Do YYYY, h:mm A");
-    const locationParts = event.location.split(",");
-    const lat = parseFloat(locationParts[0]);
-    const lng = parseFloat(locationParts[1]);
-    const center = { lat: isNaN(lat) ? 0 : lat, lng: isNaN(lng) ? 0 : lng };
+
+    // Use GeoJSON coordinates from destination
+    const destination = event.destination_id;
+    let center = DEFAULT_CENTER;
+    if (destination && destination.coordinates && Array.isArray(destination.coordinates.coordinates)) {
+        const [lng, lat] = destination.coordinates.coordinates.map(parseFloat); // GeoJSON: [lng, lat]
+        if (!isNaN(lat) && !isNaN(lng)) {
+            center = { lat, lng }; // Google Maps: { lat, lng }
+        } else {
+            console.warn("Invalid coordinates for event:", event.name, destination.coordinates.coordinates);
+        }
+    } else {
+        console.warn("No valid coordinates for event:", event.name, destination);
+    }
+
     const averageRating = ratings.length
         ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
         : t("No ratings yet");
-    const shareUrl = `${window.location.origin}/events/${event.slug}`; // Updated to slug
+    const shareUrl = `${window.location.origin}/events/${event.slug}`;
     const shareTitle = `${event.name} - ${eventDate}`;
-    const shareDescription = `Join me at ${event.name} on ${eventDate} at ${event.location}!`;
+    const shareDescription = `Join me at ${event.name} on ${eventDate} at ${destination?.name || event.location}!`;
 
     const reviews = ratings
         .map((r) => {
@@ -121,7 +133,7 @@ const EventDetail = () => {
             <NavBar />
             <Banner
                 heading={event.name}
-                subheading={event.location}
+                subheading={destination?.name || event.location}
                 backgroundImage={event.image || "https://via.placeholder.com/1200x400"}
                 height="60vh"
                 overlayOpacity={0.3}
@@ -142,7 +154,7 @@ const EventDetail = () => {
                     <Col md={6}>
                         <h2 className="fw-bold" style={{ color: "#333333" }}>{event.name}</h2>
                         <p><strong>{t("Date")}:</strong> {eventDate}</p>
-                        <p><strong>{t("Location")}:</strong> {event.location}</p>
+                        <p><strong>{t("Location")}:</strong> {destination?.name || event.location}</p>
                         <p><strong>{t("Organizer")}:</strong> {event.user_id?.firstname} {event.user_id?.lastname}</p>
                         <Badge bg="success" className="mb-3">{t("Upcoming Event")}</Badge>
                         <h5 className="mt-4">{t("Countdown to Event")}:</h5>
@@ -198,7 +210,6 @@ const EventDetail = () => {
 
                 <Row className="mb-5">
                     <Col md={6}>
-                        {/* Image Gallery */}
                         {event.imageGallery?.length > 0 && (
                             <Row className="mb-5">
                                 <Col md={12}>
@@ -221,11 +232,9 @@ const EventDetail = () => {
                     </Col>
                     <Col md={6}>
                         <h3 className="fw-bold text-primary">{t("Explore on Map")}</h3>
-                        <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
-                            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-                                <Marker position={center} label={event.name} />
-                            </GoogleMap>
-                        </LoadScript>
+                        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
+                            <Marker position={center} label={destination?.name || event.name} />
+                        </GoogleMap>
                     </Col>
                 </Row>
 
@@ -339,7 +348,7 @@ const EventDetail = () => {
                                             label={t("View Details")}
                                             variant="dark"
                                             size="md"
-                                            onClick={() => navigate(`/events/${related.slug}`)} // Updated to slug
+                                            onClick={() => navigate(`/events/${related.slug}`)}
                                         />
                                     </Card.Body>
                                 </Card>

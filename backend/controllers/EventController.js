@@ -125,7 +125,7 @@ const getEventBySlug = async (req, res) => {
     try {
         const { slug } = req.params;
         const event = await Event.findOne({ slug })
-            .populate("destination_id", "name slug")
+            .populate("destination_id", "name slug coordinates")
             .populate("user_id", "firstname lastname");
         if (!event) {
             return res.status(404).json({

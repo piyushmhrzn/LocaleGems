@@ -5,7 +5,7 @@ import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Banner from "../components/Banner";
 import { Container, Row, Col, Form, Carousel } from "react-bootstrap";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import CustomButton from "../components/Button";
 import { FaCoffee, FaUtensils, FaShoppingBag, FaCalendarAlt, FaStar, FaShare } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
@@ -193,20 +193,21 @@ const DestinationDetail = () => {
                     </Col>
                     <Col md={6}>
                         <h2 className="mb-3 fw-bold text-primary">{t("Explore on Map")}</h2>
-                        <LoadScript googleMapsApiKey="AIzaSyBjtFtbiQ2Nheh0VBWQAq5LSqs6QrACWBE">
-                            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-                                <Marker position={center} label={destination.name} />
-                                {businesses.map((b) =>
-                                    b.coordinates ? (
-                                        <Marker
-                                            key={b._id}
-                                            position={{ lat: b.coordinates.coordinates[1], lng: b.coordinates.coordinates[0] }}
-                                            label={b.name}
-                                        />
-                                    ) : null
-                                )}
-                            </GoogleMap>
-                        </LoadScript>
+
+                        {/* GOOGLE MAPS */}
+                        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
+                            <Marker position={center} label={destination.name} />
+                            {businesses.map((b) =>
+                                b.coordinates ? (
+                                    <Marker
+                                        key={b._id}
+                                        position={{ lat: b.coordinates.coordinates[1], lng: b.coordinates.coordinates[0] }}
+                                        label={b.name}
+                                    />
+                                ) : null
+                            )}
+                        </GoogleMap>
+
                     </Col>
                 </Row>
 

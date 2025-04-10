@@ -13,15 +13,16 @@ export const AppProvider = ({ children }) => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000/api"; // Use env var or fallback to localhost
+    // Use REACT_APP_API_URL or fallback to http://localhost:3000
+    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
     const fetchData = async () => {
         setLoading(true);
         try {
             const [eventsRes, destinationsRes, blogsRes] = await Promise.all([
-                axios.get(`${baseURL}/events`),
-                axios.get(`${baseURL}/destinations`),
-                axios.get(`${baseURL}/blogs`)
+                axios.get(`${baseURL}/api/events`),
+                axios.get(`${baseURL}/api/destinations`),
+                axios.get(`${baseURL}/api/blogs`)
             ]);
             setEvents(eventsRes.data.data);
             setDestinations(destinationsRes.data.data);
@@ -36,7 +37,7 @@ export const AppProvider = ({ children }) => {
     const fetchDestinations = async (page = 1) => {
         setLoading(true);
         try {
-            const response = await axios.get(`${baseURL}/destinations?page=${page}&limit=3`);
+            const response = await axios.get(`${baseURL}/api/destinations?page=${page}&limit=3`);
             setDestinations(response.data.data);
             setTotalDestinationPages(response.data.totalPages);
             setCurrentDestinationPage(page);
@@ -49,7 +50,7 @@ export const AppProvider = ({ children }) => {
 
     const fetchUser = async (token) => {
         try {
-            const res = await axios.get(`${baseURL}/auth/me`, {
+            const res = await axios.get(`${baseURL}/api/auth/me`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUser(res.data.user);
@@ -65,7 +66,7 @@ export const AppProvider = ({ children }) => {
         try {
             const queryParams = new URLSearchParams(filters).toString();
             console.log("Fetching events with filters:", queryParams);
-            const response = await axios.get(`${baseURL}/events?${queryParams}`);
+            const response = await axios.get(`${baseURL}/api/events?${queryParams}`);
             setEvents(response.data.data);
         } catch (error) {
             console.error("Error fetching filtered events:", error);
@@ -78,7 +79,7 @@ export const AppProvider = ({ children }) => {
         setLoading(true);
         try {
             const queryParams = new URLSearchParams(filters).toString();
-            const response = await axios.get(`${baseURL}/businesses?${queryParams}`);
+            const response = await axios.get(`${baseURL}/api/businesses?${queryParams}`);
             setBusinesses(response.data.data);
         } catch (error) {
             console.error("Error fetching filtered businesses:", error);
@@ -91,7 +92,7 @@ export const AppProvider = ({ children }) => {
     const fetchDestinationsBySlug = async (slug) => {
         setLoading(true);
         try {
-            const response = await axios.get(`${baseURL}/destinations/slug/${slug}`);
+            const response = await axios.get(`${baseURL}/api/destinations/slug/${slug}`);
             return response.data.data; // Return single destination
         } catch (err) {
             console.error("Error fetching destination by slug:", err);
@@ -104,7 +105,7 @@ export const AppProvider = ({ children }) => {
     const fetchEventsBySlug = async (slug) => {
         setLoading(true);
         try {
-            const response = await axios.get(`${baseURL}/events/slug/${slug}`);
+            const response = await axios.get(`${baseURL}/api/events/slug/${slug}`);
             return response.data.data; // Return single event
         } catch (err) {
             console.error("Error fetching event by slug:", err);
