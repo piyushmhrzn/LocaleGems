@@ -5,6 +5,7 @@ import NavBar from "../components/Navbar";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import { useTranslation } from "react-i18next";
+import AboutBanner from "../../public/images/about-banner.jpg";
 
 const About = () => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ const About = () => {
       <Banner
         heading={t("About Us")}
         subheading={t("Connecting travelers with local cultural gems")}
-        backgroundImage="/images/about-banner.jpg"
+        backgroundImage={AboutBanner}
       />
 
       <Container className="my-5 text-center">
