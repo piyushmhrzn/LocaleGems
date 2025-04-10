@@ -33,6 +33,8 @@ const AdminPanel = () => {
     });
     const navigate = useNavigate();
 
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
     const showMessage = (msg, variant) => {
         setMessage(msg);
         setMessageVariant(variant);
@@ -52,7 +54,7 @@ const AdminPanel = () => {
     const fetchBusinesses = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://localhost:3000/api/businesses/all", {
+            const response = await axios.get(`${apiUrl}/api/businesses/all`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setBusinesses(response.data.data || []);
@@ -64,7 +66,7 @@ const AdminPanel = () => {
     const fetchDestinations = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://localhost:3000/api/destinations/all", {
+            const response = await axios.get(`${apiUrl}/api/destinations/all`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setDestinations(response.data.data || []);
@@ -76,7 +78,7 @@ const AdminPanel = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://localhost:3000/api/users/all", {
+            const response = await axios.get(`${apiUrl}/api/users/all`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUsers(response.data.data || []);
@@ -88,7 +90,7 @@ const AdminPanel = () => {
     const fetchEvents = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await axios.get("http://localhost:3000/api/events/all", {
+            const response = await axios.get(`${apiUrl}/api/events/all`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setEvents(response.data.data || []);
@@ -101,7 +103,7 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             await axios.put(
-                `http://localhost:3000/api/businesses/${id}/status`,
+                `${apiUrl}/api/businesses/${id}/status`,
                 { status },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -116,7 +118,7 @@ const AdminPanel = () => {
         if (window.confirm("Are you sure you want to delete this destination?")) {
             try {
                 const token = localStorage.getItem("authToken");
-                await axios.delete(`http://localhost:3000/api/destinations/${id}`, {
+                await axios.delete(`${apiUrl}/api/destinations/${id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 showMessage("Destination deleted successfully", "success");
@@ -131,7 +133,7 @@ const AdminPanel = () => {
         if (window.confirm("Are you sure you want to delete this event?")) {
             try {
                 const token = localStorage.getItem("authToken");
-                await axios.delete(`http://localhost:3000/api/events/${id}`, {
+                await axios.delete(`${apiUrl}/api/events/${id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 showMessage("Event deleted successfully", "success");
@@ -192,7 +194,7 @@ const AdminPanel = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem("authToken");
-            const url = type === "destination" ? "http://localhost:3000/api/destinations" : "http://localhost:3000/api/events";
+            const url = type === "destination" ? `${apiUrl}/api/destinations` : `${apiUrl}/api/events`;
             const filteredFormData = {
                 ...formData,
                 imageGallery: formData.imageGallery.filter(url => url.trim()), // Remove empty URLs
@@ -212,8 +214,8 @@ const AdminPanel = () => {
         try {
             const token = localStorage.getItem("authToken");
             const url = type === "destination"
-                ? `http://localhost:3000/api/destinations/${selectedItem._id}`
-                : `http://localhost:3000/api/events/${selectedItem._id}`;
+                ? `${apiUrl}/api/destinations/${selectedItem._id}`
+                : `${apiUrl}/api/events/${selectedItem._id}`;
             const filteredFormData = {
                 ...formData,
                 imageGallery: formData.imageGallery.filter(url => url.trim()), // Remove empty URLs

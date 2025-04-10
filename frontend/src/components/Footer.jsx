@@ -12,11 +12,13 @@ const Footer = () => {
     const [email, setEmail] = useState(""); // State for email input
     const [isSubmitting, setIsSubmitting] = useState(false); // Optional: Disable button during submission
 
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await axios.post("http://localhost:3000/api/newsletter/subscribe", { email });
+            await axios.post(`${apiUrl}/api/newsletter/subscribe`, { email });
             toast.success("Thank you for subscribing to LocaleGems! Stay tuned for the latest updates on destinations, events, and travel tips straight to your inbox.");
             setEmail("");
         } catch (error) {

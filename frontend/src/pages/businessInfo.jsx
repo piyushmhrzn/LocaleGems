@@ -31,6 +31,8 @@ const BusinessInfo = () => {
         image: "",
     });
 
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
     useEffect(() => {
         const fetchBusinesses = async () => {
             if (!user || user.role !== "owner") {
@@ -42,10 +44,10 @@ const BusinessInfo = () => {
             try {
                 const token = localStorage.getItem("authToken");
                 const [businessResponse, destResponse] = await Promise.all([
-                    axios.get("http://localhost:3000/api/businesses", {
+                    axios.get(`${apiUrl}/api/businesses`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
-                    axios.get("http://localhost:3000/api/destinations/all", {
+                    axios.get(`${apiUrl}/api/destinations/all`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
                 ]);
@@ -95,7 +97,7 @@ const BusinessInfo = () => {
             const token = localStorage.getItem("authToken");
             console.log("Sending formData:", formData); // Debug log
             const response = await axios.put(
-                `http://localhost:3000/api/businesses/${selectedBusiness._id}`,
+                `${apiUrl}/api/businesses/${selectedBusiness._id}`,
                 formData,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -226,7 +228,7 @@ const BusinessInfo = () => {
                 </Row>
 
                 {/* Edit Business Modal */}
-                <Modal show={showEditModal} onHide={() => setShowEditModal(false)} size="lg"> {/* Added size="lg" */}
+                <Modal show={showEditModal} onHide={() => setShowEditModal(false)} size="lg">
                     <Modal.Header closeButton>
                         <Modal.Title>Edit Business</Modal.Title>
                     </Modal.Header>

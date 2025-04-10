@@ -19,7 +19,7 @@ const BlogCard = ({ data }) => {
             >
                 <Card.Img
                     variant="top"
-                    src={data.image || "https://via.placeholder.com/300x250"}
+                    src={data.image || "https://images.pexels.com/photos/8747768/pexels-photo-8747768.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}
                     alt={data.title}
                     style={{
                         height: "100%",

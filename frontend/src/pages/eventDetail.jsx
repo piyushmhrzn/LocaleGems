@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import Loader from "../components/Loader";
 
 const containerStyle = { width: "100%", height: "400px" };
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
 
 const EventDetail = () => {
     const { t } = useTranslation();
@@ -60,7 +60,7 @@ const EventDetail = () => {
         try {
             const token = localStorage.getItem("authToken");
             await axios.post(
-                "http://localhost:3000/api/ratings",
+                `${BASE_URL}/api/ratings`,
                 { event_id: event._id, rating: userRating }, // Use _id internally
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -78,7 +78,7 @@ const EventDetail = () => {
         try {
             const token = localStorage.getItem("authToken");
             await axios.post(
-                "http://localhost:3000/api/comments",
+                `${BASE_URL}/api/comments`,
                 { event_id: event._id, comment: userComment }, // Use _id internally
                 { headers: { Authorization: `Bearer ${token}` } }
             );

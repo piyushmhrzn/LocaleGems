@@ -8,6 +8,8 @@ const AdminLogin = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -15,7 +17,7 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/api/auth/admin-login", formData);
+            const response = await axios.post(`${apiUrl}/api/auth/admin-login`, formData);
             localStorage.setItem("authToken", response.data.token); // Store JWT
             setErrorMessage("");
             navigate("/admin"); // Redirect to AdminPanel

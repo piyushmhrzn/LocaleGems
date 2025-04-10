@@ -26,7 +26,7 @@ const About = () => {
             <h2 className="mb-4">🌍 Our Mission</h2>
             <p className="lead">
               At <strong>LocaleGems</strong>, we aim to connect travelers with unique cultural experiences,
-              events, and destinations for a truly authentic journey. We’re more than a platform—we’re a cultural connector that supports meaningful tourism and community growth.
+              events, and destinations for a truly authentic journey. We're more than a platform—we're a cultural connector that supports meaningful tourism and community growth.
             </p>
           </Col>
           <Col md={6}>
@@ -43,52 +43,52 @@ const About = () => {
 
         {/* Why LocaleGems */}
         <Container-fluid className="my-5 text-center">
-        <Row className="justify-content-center mb-5 bg-mute">
-          <Col md={10}>
-            <h2 className="mb-4">✨ Why LocaleGems?</h2>
-            <p className="mb-4">We create value for all:</p>
-            <Row xs={1} md={3} className="g-4">
-              {/* Local Communities */}
-              <Col>
-                <Card className="h-100 text-center shadow border-0">
-                  <Card.Body>
-                    <ShopWindow size={48} className="text-primary mb-3" />
-                    <Card.Title>Local Communities</Card.Title>
-                    <Card.Text>
-                      We help small businesses gain visibility and increase revenue through our platform.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
+          <Row className="justify-content-center mb-5 bg-mute">
+            <Col md={10}>
+              <h2 className="mb-4">✨ Why LocaleGems?</h2>
+              <p className="mb-4">We create value for all:</p>
+              <Row xs={1} md={3} className="g-4">
+                {/* Local Communities */}
+                <Col>
+                  <Card className="h-100 text-center shadow border-0">
+                    <Card.Body>
+                      <ShopWindow size={48} className="text-primary mb-3" />
+                      <Card.Title>Local Communities</Card.Title>
+                      <Card.Text>
+                        We help small businesses gain visibility and increase revenue through our platform.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
 
-              {/* Travelers */}
-              <Col>
-                <Card className="h-100 text-center shadow border-0">
-                  <Card.Body>
-                    <Compass size={48} className="text-success mb-3" />
-                    <Card.Title>Travelers</Card.Title>
-                    <Card.Text>
-                      Discover and book authentic cultural experiences, tailored to your interests.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
+                {/* Travelers */}
+                <Col>
+                  <Card className="h-100 text-center shadow border-0">
+                    <Card.Body>
+                      <Compass size={48} className="text-success mb-3" />
+                      <Card.Title>Travelers</Card.Title>
+                      <Card.Text>
+                        Discover and book authentic cultural experiences, tailored to your interests.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
 
-              {/* Culture */}
-              <Col>
-                <Card className="h-100 text-center shadow border-0">
-                  <Card.Body>
-                    <GlobeAmericas size={48} className="text-warning mb-3" />
-                    <Card.Title>Culture</Card.Title>
-                    <Card.Text>
-                      Support preservation and celebration of heritage through immersive travel.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+                {/* Culture */}
+                <Col>
+                  <Card className="h-100 text-center shadow border-0">
+                    <Card.Body>
+                      <GlobeAmericas size={48} className="text-warning mb-3" />
+                      <Card.Title>Culture</Card.Title>
+                      <Card.Text>
+                        Support preservation and celebration of heritage through immersive travel.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Container-fluid>
 
         {/* Our Vision */}

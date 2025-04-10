@@ -10,10 +10,12 @@ import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { useTranslation } from "react-i18next";
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
 const AuthPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { setUser } = useContext(AppContext);     // Get the setUser function from the context
+    const { setUser } = useContext(AppContext); // Get the setUser function from the context
     const [loginData, setLoginData] = useState({
         email: "",
         password: ""
@@ -35,7 +37,7 @@ const AuthPage = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:3000/api/auth/login", loginData, {
+            const response = await axios.post(`${apiUrl}/api/auth/login`, loginData, {
                 headers: { "Content-Type": "application/json" }
             });
             localStorage.setItem("authToken", response.data.token);
@@ -52,7 +54,7 @@ const AuthPage = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:3000/api/auth/register", signupData);
+            const response = await axios.post(`${apiUrl}/api/auth/register`, signupData);
             console.log("Signup successful:", response.data);
 
             setMessage("Signup successful! Please log in.");

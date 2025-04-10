@@ -13,7 +13,7 @@ export const AppProvider = ({ children }) => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const baseURL = "http://localhost:3000/api";
+    const baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000/api"; // Use env var or fallback to localhost
 
     const fetchData = async () => {
         setLoading(true);

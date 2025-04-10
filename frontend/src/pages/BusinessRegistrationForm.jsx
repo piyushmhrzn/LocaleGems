@@ -23,6 +23,8 @@ const BusinessRegistrationForm = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -30,7 +32,7 @@ const BusinessRegistrationForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/api/businesses", formData, {
+            const response = await axios.post(`${apiUrl}/api/businesses`, formData, {
                 headers: { "Content-Type": "application/json" },
             });
             setSuccessMessage(response.data.message); // "Business registered successfully. Waiting for verification"

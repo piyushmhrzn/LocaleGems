@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+require("dotenv").config({ path: "./.env" }); // Load environment variables from .env file
 
 module.exports = {
     mode: "production",
@@ -40,6 +41,9 @@ module.exports = {
             template: "./public/index.html",
             filename: "index.html"
         }),
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin(),
+        new webpack.DefinePlugin({
+            "process.env.REACT_APP_API_URL": JSON.stringify(process.env.REACT_APP_API_URL),
+        }),
     ]
 };

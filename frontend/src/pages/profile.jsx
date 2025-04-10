@@ -8,6 +8,8 @@ import { Container, Row, Col, Card, Button, Modal, Form, Image } from "react-boo
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
 const Profile = () => {
     const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ const Profile = () => {
             country: user?.country || "",
         });
         const [previewImage, setPreviewImage] = useState(
-            user && user.image ? `http://localhost:3000${user.image}` : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
+            user && user.image ? `${apiUrl}${user.image}` : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
         );
         const [error, setError] = useState("");
 
@@ -66,7 +68,7 @@ const Profile = () => {
             try {
                 const token = localStorage.getItem("authToken");
                 const response = await axios.put(
-                    `http://localhost:3000/api/users/${user._id}`,
+                    `${apiUrl}/api/users/${user._id}`,
                     formData,
                     {
                         headers: { Authorization: `Bearer ${token}` },
@@ -85,7 +87,7 @@ const Profile = () => {
             try {
                 const token = localStorage.getItem("authToken");
                 const response = await axios.put(
-                    `http://localhost:3000/api/users/${user._id}`,
+                    `${apiUrl}/api/users/${user._id}`,
                     data,
                     {
                         headers: {
@@ -99,7 +101,7 @@ const Profile = () => {
             } catch (err) {
                 setError(err.response?.data?.message || "Failed to upload image");
                 setPreviewImage(
-                    user?.image ? `http://localhost:3000${user.image}` : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
+                    user?.image ? `${apiUrl}${user.image}` : "https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png"
                 );
             }
         };

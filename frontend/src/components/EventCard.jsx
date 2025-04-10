@@ -33,7 +33,7 @@ const EventCard = ({ data }) => {
                             }}
                         >
                             <Card.Img
-                                src={data.image || "https://via.placeholder.com/600x300"}
+                                src={data.image || "https://images.pexels.com/photos/8747768/pexels-photo-8747768.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}
                                 alt={data.name}
                                 style={{
                                     width: "100%",
@@ -89,10 +89,10 @@ const EventCard = ({ data }) => {
                                 {data.description?.slice(0, 150) || "Join us for an unforgettable experience!"}...
                             </Card.Text>
                             <div className="mt-3">
-                                <button  className="badge btn learnmore text-white px-4 py-2"  style={{ fontSize: "1rem", cursor: "pointer" }}>
-                                Learn More
+                                <button className="badge btn learnmore text-white px-4 py-2" style={{ fontSize: "1rem", cursor: "pointer" }}>
+                                    Learn More
                                 </button>
-                            
+
                             </div>
                         </Card.Body>
                     </Col>

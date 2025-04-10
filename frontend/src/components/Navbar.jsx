@@ -17,6 +17,8 @@ const NavBar = () => {
   const [hasBusiness, setHasBusiness] = useState(false);
   const navigate = useNavigate();
 
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+
   const handleScroll = () => {
     setScrolled(window.scrollY > 50);
   };
@@ -35,7 +37,7 @@ const NavBar = () => {
       if (user && user.role === "owner") {
         try {
           const token = localStorage.getItem("authToken");
-          const response = await axios.get("http://localhost:3000/api/businesses", {
+          const response = await axios.get(`${apiUrl}/api/businesses`, {
             headers: { Authorization: `Bearer ${token}` },
             params: { user_id: user._id },
           });
@@ -62,9 +64,9 @@ const NavBar = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const [destResponse, eventResponse, blogResponse] = await Promise.all([
-        axios.get(`http://localhost:3000/api/destinations/search?query=${encodeURIComponent(searchQuery)}`, { headers }),
-        axios.get(`http://localhost:3000/api/events/search?query=${encodeURIComponent(searchQuery)}`, { headers }),
-        axios.get(`http://localhost:3000/api/blogs/search?query=${encodeURIComponent(searchQuery)}`, { headers }).catch(() => ({ data: { data: [] } })),
+        axios.get(`${apiUrl}/api/destinations/search?query=${encodeURIComponent(searchQuery)}`, { headers }),
+        axios.get(`${apiUrl}/api/events/search?query=${encodeURIComponent(searchQuery)}`, { headers }),
+        axios.get(`${apiUrl}/api/blogs/search?query=${encodeURIComponent(searchQuery)}`, { headers }).catch(() => ({ data: { data: [] } })),
       ]);
 
       setSearchResults({
