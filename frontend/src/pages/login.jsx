@@ -9,6 +9,7 @@ import CustomButton from "../components/Button";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { useTranslation } from "react-i18next";
+import LoginBanner from "../../public/images/login-banner.jpg";
 
 const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
 
@@ -84,7 +85,7 @@ const AuthPage = () => {
             <Banner
                 heading={t("Login or Sign Up")}
                 subheading={t("Join us to discover the best cultural experiences")}
-                backgroundImage="/images/login-banner.jpg"
+                backgroundImage={LoginBanner}
                 height="50vh"
             />
 

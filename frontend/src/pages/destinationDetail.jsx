@@ -12,6 +12,7 @@ import { AppContext } from "../context/AppContext";
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from "react-share";
 import { useTranslation } from "react-i18next";
 import Loader from "../components/Loader";
+import DestinationDetailBanner from "../../public/images/destination-detail-banner.jpg";
 
 const containerStyle = { width: "100%", height: "400px" };
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
@@ -152,7 +153,7 @@ const DestinationDetail = () => {
             <Banner
                 heading={destination.name}
                 subheading={destination.short_description}
-                backgroundImage={destination.image || "https://via.placeholder.com/1200x400"}
+                backgroundImage={destination.image || DestinationDetailBanner}
                 height="50vh"
                 overlayOpacity={0.3}
             />

@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Card from "../components/Card";
 import { AppContext } from "../context/AppContext";
 import { useTranslation } from "react-i18next";
+import EventBanner from "../../public/images/event-banner.jpg";
 
 const Events = () => {
     const { t } = useTranslation();
@@ -43,7 +44,7 @@ const Events = () => {
             <Banner
                 heading={t("See what's the Latest Events")}
                 subheading={t("Find events happening near you")}
-                backgroundImage="/images/event-banner.jpg"
+                backgroundImage={EventBanner}
             />
             <Container>
                 <h2 className="mt-4">Events</h2>

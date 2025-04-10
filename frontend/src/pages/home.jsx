@@ -10,6 +10,9 @@ import EventCard from "../components/EventCard";
 import CustomButton from "../components/Button";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import HomeBanner1 from "../../public/images/home-banner1.jpg";
+import HomeBanner2 from "../../public/images/home-banner2.jpg";
+import HomeBanner3 from "../../public/images/home-banner3.jpg";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -23,7 +26,7 @@ const Home = () => {
       <Banner
         heading={t("Discover the Best Cultural Experiences")}
         subheading={t("Find the most authentic local experiences near you")}
-        images={["/images/home-banner1.jpg", "/images/home-banner2.jpg", "/images/home-banner3.jpg"]}
+        images={[HomeBanner1, HomeBanner2, HomeBanner3]}
         isSlider={true} // Enable slider for home page
       >
         <div className="text-center mt-5">

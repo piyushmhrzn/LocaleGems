@@ -7,6 +7,7 @@ import { AppContext } from "../context/AppContext";
 import { Container, Row, Col, Card, Button, Modal, Form, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ProfileBanner from "../../public/images/profile-banner.jpg";
 
 const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
 
@@ -114,7 +115,7 @@ const Profile = () => {
                 <Banner
                     heading={`Welcome, ${user.firstname} ${user.lastname}`}
                     subheading="Manage your profile and explore your journey with LocaleGems"
-                    backgroundImage="/images/profile-banner.jpg"
+                    backgroundImage={ProfileBanner}
                     height="50vh"
                 />
                 <Container className="my-5">

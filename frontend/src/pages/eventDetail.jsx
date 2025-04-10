@@ -134,7 +134,7 @@ const EventDetail = () => {
             <Banner
                 heading={event.name}
                 subheading={destination?.name || event.location}
-                backgroundImage={event.image || "https://via.placeholder.com/1200x400"}
+                backgroundImage={event.image || "https://images.pexels.com/photos/5475779/pexels-photo-5475779.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}
                 height="60vh"
                 overlayOpacity={0.3}
             />
@@ -145,7 +145,7 @@ const EventDetail = () => {
                             <Carousel.Item>
                                 <img
                                     className="d-block w-100"
-                                    src={event.image || "https://via.placeholder.com/600x300"}
+                                    src={event.image || "https://images.pexels.com/photos/5475779/pexels-photo-5475779.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}
                                     alt={event.name}
                                 />
                             </Carousel.Item>

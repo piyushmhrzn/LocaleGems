@@ -6,6 +6,7 @@ import { AppContext } from "../context/AppContext";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "../components/Card";
 import { useTranslation } from "react-i18next";
+import BlogBanner from "../../public/images/blog-banner.jpg";
 
 const Blogs = () => {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ const Blogs = () => {
       <Banner
         heading={t("Our Blog")}
         subheading={t("Stay updated with the latest stories and insights")}
-        backgroundImage="/images/blog-banner.jpg"
+        backgroundImage={BlogBanner}
       />
 
       <Container>

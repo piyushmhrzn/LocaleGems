@@ -6,6 +6,8 @@ import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import { useTranslation } from "react-i18next";
 import AboutBanner from "../../public/images/about-banner.jpg";
+import TravelGroup from "../../public/images/travel-group.jpg";
+import VisionTravel from "../../public/images/vision-travel.jpg";
 
 const About = () => {
   const { t } = useTranslation();
@@ -32,7 +34,7 @@ const About = () => {
           </Col>
           <Col md={6}>
             <Image
-              src="/images/travel-group.jpg"
+              src={TravelGroup}
               fluid
               rounded
               className="shadow"
@@ -43,7 +45,7 @@ const About = () => {
         </Row>
 
         {/* Why LocaleGems */}
-        <Container-fluid className="my-5 text-center">
+        <Container className="my-5 text-center">
           <Row className="justify-content-center mb-5 bg-mute">
             <Col md={10}>
               <h2 className="mb-4">✨ Why LocaleGems?</h2>
@@ -90,7 +92,7 @@ const About = () => {
               </Row>
             </Col>
           </Row>
-        </Container-fluid>
+        </Container>
 
         {/* Our Vision */}
         <Row className="align-items-center justify-content-center my-5 flex-md-row-reverse">
@@ -104,10 +106,10 @@ const About = () => {
           </Col>
           <Col md={6}>
             <Image
-              src="/images/vision-travel.jpg"
+              src={VisionTravel}
               fluid
               rounded
-              className="shadow"
+              className="shadow-commander"
               alt="Vision"
               style={{ maxHeight: "400px", objectFit: "cover", width: "100%" }}
             />

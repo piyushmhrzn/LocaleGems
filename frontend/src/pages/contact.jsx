@@ -5,6 +5,7 @@ import NavBar from "../components/Navbar";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import { useTranslation } from "react-i18next";
+import ContactBanner from "../../public/images/contact-banner.jpg";
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ const Contact = () => {
       <Banner
         heading={t("Contact Us")}
         subheading={t("Stay connected with us")}
-        backgroundImage="/images/contact-banner.jpg"
+        backgroundImage={ContactBanner}
       />
 
       <Container className="my-5">

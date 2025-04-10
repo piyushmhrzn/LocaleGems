@@ -6,6 +6,7 @@ import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import RegisterBanner from "../../public/images/about-banner.jpg";
 
 const BusinessRegistrationForm = () => {
     const { t } = useTranslation();
@@ -61,7 +62,7 @@ const BusinessRegistrationForm = () => {
             <Banner
                 heading={t("Register Your Business Today!")}
                 subheading={t("We are here to help you")}
-                backgroundImage="/images/about-banner.jpg"
+                backgroundImage={RegisterBanner}
                 height="60vh"
             />
             <Container className="my-5">

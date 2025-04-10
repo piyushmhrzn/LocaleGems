@@ -6,6 +6,7 @@ import CustomButton from "../components/Button";
 import { Container, Row, Col, Alert, Card, Button, Modal, Form } from "react-bootstrap";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import RegisterBanner from "../../public/images/about-banner.jpg";
 
 const BusinessInfo = () => {
     const { user } = useContext(AppContext);
@@ -118,7 +119,7 @@ const BusinessInfo = () => {
             <Banner
                 heading="Your Business Information"
                 subheading="View details of your registered business."
-                backgroundImage="/images/about-banner.jpg"
+                backgroundImage={RegisterBanner}
                 height="60vh"
             />
             <Container className="my-5">

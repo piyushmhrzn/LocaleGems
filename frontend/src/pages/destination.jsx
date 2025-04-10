@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Card from "../components/Card";
 import { AppContext } from "../context/AppContext";
 import { useTranslation } from "react-i18next";
+import DestinationBanner from "../../public/images/destination-banner.jpg";
 
 const Destinations = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const Destinations = () => {
       <Banner
         heading={t("Hidden Destinations you must visit")}
         subheading={t("We bring you all the hidden treasures from around the world")}
-        backgroundImage="/images/destination-banner.jpg"
+        backgroundImage={DestinationBanner}
       />
       <Container>
         <h2 className="mt-4">Hidden Destinations</h2>
