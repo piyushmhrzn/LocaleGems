@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -8,6 +9,7 @@ import Card from "../components/Card";
 import { AppContext } from "../context/AppContext";
 import { useTranslation } from "react-i18next";
 import DestinationBanner from "../../public/images/destination-banner.jpg";
+import { Helmet } from "react-helmet"; // ✅ Helmet for SEO
 
 const Destinations = () => {
   const { t } = useTranslation();
@@ -20,7 +22,7 @@ const Destinations = () => {
   } = useContext(AppContext);
 
   useEffect(() => {
-    fetchDestinations(currentDestinationPage); // Load destinations when component mounts
+    fetchDestinations(currentDestinationPage);
   }, [currentDestinationPage]);
 
   const handlePageChange = (newPage) => {
@@ -31,6 +33,28 @@ const Destinations = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Hidden Cultural Destinations | LocaleGems</title>
+        <meta
+          name="description"
+          content="Discover hidden cultural gems and offbeat travel destinations with LocaleGems. Explore unique places around the world."
+        />
+        <meta
+          name="keywords"
+          content="hidden destinations, cultural tourism, offbeat travel, undiscovered places, LocaleGems"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://localegems25.onrender.com/destinations" />
+        <meta property="og:title" content="Hidden Cultural Destinations | LocaleGems" />
+        <meta
+          property="og:description"
+          content="Explore the world's best-kept secrets and cultural travel gems with LocaleGems."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://localegems25.onrender.com/destinations" />
+        <meta property="og:image" content="https://localegems25.onrender.com/preview.jpg" />
+      </Helmet>
+
       <NavBar />
       <Banner
         heading={t("Hidden Destinations you must visit")}
@@ -54,7 +78,6 @@ const Destinations = () => {
               ))}
             </Row>
 
-            {/* Pagination Controls */}
             <div className="d-flex justify-content-center mb-5">
               <Button
                 variant="primary"

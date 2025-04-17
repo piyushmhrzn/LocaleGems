@@ -13,9 +13,10 @@ import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } fr
 import { useTranslation } from "react-i18next";
 import Loader from "../components/Loader";
 import DestinationDetailBanner from "../../public/images/destination-detail-banner.jpg";
+import { Helmet } from "react-helmet"; // ✅ SEO Helmet
 
 const containerStyle = { width: "100%", height: "400px" };
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
 const DestinationDetail = () => {
     const { t } = useTranslation();
@@ -34,13 +35,13 @@ const DestinationDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const destinationData = await fetchDestinationsBySlug(slug); // Use new context function
+                const destinationData = await fetchDestinationsBySlug(slug);
                 setDestination(destinationData);
 
                 const [businessRes, eventRes, ratingRes, commentRes] = await Promise.all([
                     axios.get(`${BASE_URL}/api/businesses/all`),
                     axios.get(`${BASE_URL}/api/events`),
-                    axios.get(`${BASE_URL}/api/ratings/destination/${destinationData._id}`), // Use ID internally
+                    axios.get(`${BASE_URL}/api/ratings/destination/${destinationData._id}`),
                     axios.get(`${BASE_URL}/api/comments/destination/${destinationData._id}`),
                 ]);
 
@@ -50,16 +51,13 @@ const DestinationDetail = () => {
                 setComments(commentRes.data.data);
 
                 const relatedBusinesses = allBusinesses.filter((business) => {
-                    const destId = business.destination_id?._id
-                        ? business.destination_id._id.toString()
-                        : business.destination_id?.toString();
-                    return destId === destinationData._id;
+                    const destId = business.destination_id?._id || business.destination_id;
+                    return destId?.toString() === destinationData._id;
                 });
+
                 const relatedEvents = allEvents.filter((event) => {
-                    const destId = event.destination_id?._id
-                        ? event.destination_id._id.toString()
-                        : event.destination_id?.toString();
-                    return destId === destinationData._id;
+                    const destId = event.destination_id?._id || event.destination_id;
+                    return destId?.toString() === destinationData._id;
                 });
 
                 setBusinesses(relatedBusinesses);
@@ -79,7 +77,7 @@ const DestinationDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 `${BASE_URL}/api/ratings`,
-                { destination_id: destination._id, rating: userRating }, // Use _id internally
+                { destination_id: destination._id, rating: userRating },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setRatings([...ratings, { user_id: user, rating: userRating }]);
@@ -97,7 +95,7 @@ const DestinationDetail = () => {
             const token = localStorage.getItem("authToken");
             await axios.post(
                 `${BASE_URL}/api/comments`,
-                { destination_id: destination._id, comment: userComment }, // Use _id internally
+                { destination_id: destination._id, comment: userComment },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setComments([...comments, { user_id: user, comment: userComment }]);
@@ -116,23 +114,11 @@ const DestinationDetail = () => {
         lng: destination.coordinates?.coordinates[0] || parseFloat(destination.location.split(",")[1]),
     };
 
-    const getBusinessIcon = (type) => {
-        switch (type) {
-            case "Cafes":
-                return <FaCoffee className="me-2" style={{ color: "#d4a373" }} />;
-            case "Restaurants":
-                return <FaUtensils className="me-2" style={{ color: "#e63946" }} />;
-            case "Souvenir Shops":
-                return <FaShoppingBag className="me-2" style={{ color: "#457b9d" }} />;
-            default:
-                return null;
-        }
-    };
-
     const averageRating = ratings.length
         ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
         : t("No ratings yet");
-    const shareUrl = `${window.location.origin}/destinations/${destination.slug}`; // Updated to slug
+
+    const shareUrl = `${window.location.origin}/destinations/${destination.slug}`;
     const shareTitle = `${destination.name} - ${destination.city}, ${destination.country}`;
     const shareDescription = destination.short_description;
 
@@ -147,8 +133,38 @@ const DestinationDetail = () => {
                 .map((c) => ({ user_id: c.user_id, comment: c.comment }))
         );
 
+    const getBusinessIcon = (type) => {
+        switch (type) {
+            case "Cafes":
+                return <FaCoffee className="me-2" style={{ color: "#d4a373" }} />;
+            case "Restaurants":
+                return <FaUtensils className="me-2" style={{ color: "#e63946" }} />;
+            case "Souvenir Shops":
+                return <FaShoppingBag className="me-2" style={{ color: "#457b9d" }} />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <>
+            {/* ✅ SEO Helmet Block */}
+            <Helmet>
+                <title>{destination.name} | LocaleGems</title>
+                <meta
+                    name="description"
+                    content={destination.short_description || "Explore hidden cultural destinations and authentic local experiences with LocaleGems."}
+                />
+                <meta name="keywords" content={`LocaleGems, ${destination.name}, ${destination.city}, travel, cultural tourism`} />
+                <meta name="robots" content="index, follow" />
+                <link rel="canonical" href={`https://localegems25.onrender.com/destinations/${destination.slug}`} />
+                <meta property="og:title" content={`${destination.name} | LocaleGems`} />
+                <meta property="og:description" content={shareDescription} />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content={shareUrl} />
+                <meta property="og:image" content={destination.image || "https://localegems25.onrender.com/preview.jpg"} />
+            </Helmet>
+
             <NavBar />
             <Banner
                 heading={destination.name}
@@ -157,7 +173,8 @@ const DestinationDetail = () => {
                 height="50vh"
                 overlayOpacity={0.3}
             />
-            <Container className="py-5">
+            
+           <Container className="py-5">
                 <Row className="mb-5">
                     <Col md={6}>
                         <h2 className="mb-3 fw-bold text-primary">{t("Details")}</h2>
@@ -391,6 +408,7 @@ const DestinationDetail = () => {
                     />
                 </div>
             </Container>
+            
             <Footer />
         </>
     );

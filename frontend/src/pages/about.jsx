@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import { ShopWindow, Compass, GlobeAmericas } from "react-bootstrap-icons";
@@ -8,14 +9,30 @@ import { useTranslation } from "react-i18next";
 import AboutBanner from "../../public/images/about-banner.jpg";
 import TravelGroup from "../../public/images/travel-group.jpg";
 import VisionTravel from "../../public/images/vision-travel.jpg";
+import { Helmet } from "react-helmet"; // ✅ SEO Helmet
 
 const About = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      <NavBar />
+      <Helmet>
+        <title>About LocaleGems | Discover Our Mission</title>
+        <meta
+          name="description"
+          content="Learn about LocaleGems – a platform dedicated to connecting travelers with local cultural experiences, supporting communities and preserving heritage."
+        />
+        <meta name="keywords" content="about LocaleGems, cultural tourism, mission, travel values, tourism platform" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://localegems25.onrender.com/about" />
+        <meta property="og:title" content="About LocaleGems | Discover Our Mission" />
+        <meta property="og:description" content="Connecting travelers with authentic cultural experiences and supporting local communities worldwide." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://localegems25.onrender.com/about" />
+        <meta property="og:image" content="https://localegems25.onrender.com/preview.jpg" />
+      </Helmet>
 
+      <NavBar />
       <Banner
         heading={t("About Us")}
         subheading={t("Connecting travelers with local cultural gems")}
@@ -23,7 +40,6 @@ const About = () => {
       />
 
       <Container className="my-5 text-center">
-        {/* Our Mission */}
         <Row className="align-items-center justify-content-center mb-5">
           <Col md={6} className="text-start">
             <h2 className="mb-4">🌍 Our Mission</h2>
@@ -44,14 +60,12 @@ const About = () => {
           </Col>
         </Row>
 
-        {/* Why LocaleGems */}
         <Container className="my-5 text-center">
           <Row className="justify-content-center mb-5 bg-mute">
             <Col md={10}>
               <h2 className="mb-4">✨ Why LocaleGems?</h2>
               <p className="mb-4">We create value for all:</p>
               <Row xs={1} md={3} className="g-4">
-                {/* Local Communities */}
                 <Col>
                   <Card className="h-100 text-center shadow border-0">
                     <Card.Body>
@@ -63,8 +77,6 @@ const About = () => {
                     </Card.Body>
                   </Card>
                 </Col>
-
-                {/* Travelers */}
                 <Col>
                   <Card className="h-100 text-center shadow border-0">
                     <Card.Body>
@@ -76,8 +88,6 @@ const About = () => {
                     </Card.Body>
                   </Card>
                 </Col>
-
-                {/* Culture */}
                 <Col>
                   <Card className="h-100 text-center shadow border-0">
                     <Card.Body>
@@ -94,7 +104,6 @@ const About = () => {
           </Row>
         </Container>
 
-        {/* Our Vision */}
         <Row className="align-items-center justify-content-center my-5 flex-md-row-reverse">
           <Col md={6} className="text-start">
             <h2 className="mb-4">🚀 Our Vision</h2>

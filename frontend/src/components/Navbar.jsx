@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
 
 const NavBar = () => {
   const { t, i18n } = useTranslation(); // Access translations and i18n instance
@@ -119,6 +120,7 @@ const NavBar = () => {
   };
 
   return (
+    
     <Navbar
       expand="lg"
       className={`fixed-top ${scrolled ? "bg-nav shadow-lg" : ""}`}

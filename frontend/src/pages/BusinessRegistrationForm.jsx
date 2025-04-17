@@ -6,6 +6,7 @@ import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet"; // ✅ Helmet for SEO
 import RegisterBanner from "../../public/images/about-banner.jpg";
 
 const BusinessRegistrationForm = () => {
@@ -24,7 +25,7 @@ const BusinessRegistrationForm = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000"; // Use env var or fallback to localhost
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,9 +37,8 @@ const BusinessRegistrationForm = () => {
             const response = await axios.post(`${apiUrl}/api/businesses`, formData, {
                 headers: { "Content-Type": "application/json" },
             });
-            setSuccessMessage(response.data.message); // "Business registered successfully. Waiting for verification"
+            setSuccessMessage(response.data.message);
             setErrorMessage("");
-            // Clear form
             setFormData({
                 name: "",
                 category: "",
@@ -58,6 +58,29 @@ const BusinessRegistrationForm = () => {
 
     return (
         <>
+            {/* ✅ SEO Helmet Block */}
+            <Helmet>
+                <title>Register Your Business | LocaleGems</title>
+                <meta
+                    name="description"
+                    content="List your local business on LocaleGems and connect with cultural travelers. Register now and grow your audience."
+                />
+                <meta
+                    name="keywords"
+                    content="register business, local business directory, cultural tourism, add your shop, LocaleGems registration"
+                />
+                <meta name="robots" content="index, follow" />
+                <link rel="canonical" href="https://localegems25.onrender.com/BusinessRegistrationForm" />
+                <meta property="og:title" content="Register Your Business | LocaleGems" />
+                <meta
+                    property="og:description"
+                    content="Grow your local business by registering with LocaleGems. Reach travelers looking for authentic cultural experiences."
+                />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://localegems25.onrender.com/BusinessRegistrationForm" />
+                <meta property="og:image" content="https://localegems25.onrender.com/preview.jpg" />
+            </Helmet>
+
             <NavBar />
             <Banner
                 heading={t("Register Your Business Today!")}
@@ -65,6 +88,7 @@ const BusinessRegistrationForm = () => {
                 backgroundImage={RegisterBanner}
                 height="60vh"
             />
+
             <Container className="my-5">
                 <Row className="justify-content-md-center">
                     {successMessage && <Alert variant="success">{successMessage}</Alert>}
@@ -215,6 +239,7 @@ const BusinessRegistrationForm = () => {
                     </Col>
                 </Row>
             </Container>
+
             <Footer />
         </>
     );
