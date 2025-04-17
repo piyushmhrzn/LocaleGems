@@ -6,6 +6,7 @@ import CustomButton from "../components/Button";
 import { Container, Row, Col, Alert, Card, Button, Modal, Form } from "react-bootstrap";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 import RegisterBanner from "../../public/images/about-banner.jpg";
 
 const BusinessInfo = () => {
@@ -115,6 +116,11 @@ const BusinessInfo = () => {
 
     return (
         <>
+         <Helmet>
+                <title>My Business Info | LocaleGems</title>
+                <meta name="description" content="View and manage your registered business information on LocaleGems. Edit your listing, contact info, and more." />
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <NavBar />
             <Banner
                 heading="Your Business Information"
