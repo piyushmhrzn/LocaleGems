@@ -3,6 +3,7 @@ import { Container, Row, Col, Table, Button, Alert, Offcanvas, Nav, Card, Modal,
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaTachometerAlt, FaMapMarkerAlt, FaStore, FaSignOutAlt, FaUsers, FaCalendarAlt } from "react-icons/fa";
+import { Helmet } from "react-helmet";
 
 const AdminPanel = () => {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -816,7 +817,15 @@ const AdminPanel = () => {
     );
 
     return (
-        <Container fluid>
+        <>
+        <Helmet>
+        <title>Admin Panel | LocaleGems</title>
+        <meta name="description" content="Manage LocaleGems destinations, events, businesses, and users with powerful admin tools." />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://www.localegems.com/admin" />
+      </Helmet>
+
+         <Container fluid>
             <Row>
                 <Col md={2} style={{ backgroundColor: "#162F65", minHeight: "100vh", padding: "20px" }}>
                     <Button
@@ -1008,6 +1017,8 @@ const AdminPanel = () => {
                 </Col>
             </Row>
         </Container>
+        </>
+       
     );
 };
 
