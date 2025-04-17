@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CustomButton from "../components/Button";
+import { Helmet } from "react-helmet";
 
 const NotFound = () => {
     const { t } = useTranslation();
@@ -10,6 +11,11 @@ const NotFound = () => {
 
     return (
         <>
+         <Helmet>
+                <title>404 - Page Not Found | LocaleGems</title>
+                <meta name="description" content="Oops! The page you’re looking for doesn’t exist or might have been moved. Navigate back to the home page." />
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <Container className="py-5 text-center" style={{ minHeight: "80vh" }}>
                 <Row className="justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
                     <Col md={8}>

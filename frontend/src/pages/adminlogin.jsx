@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet"; 
 
 const AdminLogin = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -27,7 +28,14 @@ const AdminLogin = () => {
     };
 
     return (
-        <Container className="my-5">
+        <>
+         <Helmet>
+                <title>Admin Login | LocaleGems Dashboard</title>
+                <meta name="description" content="Secure login page for LocaleGems administrators to access the admin dashboard and manage platform data." />
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
+
+          <Container className="my-5">
             <Row className="justify-content-md-center">
                 <Col md={6}>
                     <div className="p-4 shadow-lg rounded-3 bg-white">
@@ -79,6 +87,8 @@ const AdminLogin = () => {
                 </Col>
             </Row>
         </Container>
+        </>
+      
     );
 };
 
