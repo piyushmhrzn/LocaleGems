@@ -194,17 +194,21 @@ const AdminPanel = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem("authToken");
+            if (!token) {
+                throw new Error("No authentication token found. Please log in.");
+            }
             const url = type === "destination" ? `${apiUrl}/api/destinations` : `${apiUrl}/api/events`;
             const filteredFormData = {
                 ...formData,
-                imageGallery: formData.imageGallery.filter(url => url.trim()), // Remove empty URLs
+                imageGallery: formData.imageGallery.filter(url => url.trim()),
             };
-            await axios.post(url, filteredFormData, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios.post(url, filteredFormData, { headers: { Authorization: `Bearer ${token}` } });
             showMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} created successfully`, "success");
             setShowCreateModal(false);
             resetForm();
             type === "destination" ? fetchDestinations() : fetchEvents();
         } catch (error) {
+            console.error('Error response:', error.response?.data); // Log detailed error
             showMessage(`Failed to create ${type}: ` + (error.response?.data?.message || error.message), "danger");
         }
     };
@@ -243,6 +247,7 @@ const AdminPanel = () => {
                 image: item.image || "",
                 imageGallery: item.imageGallery.length > 0 ? item.imageGallery : [""], // Load existing or start with one empty
                 coordinates: { coordinates: [item.coordinates.coordinates[0], item.coordinates.coordinates[1]] },
+                slug: "",
                 date: "",
                 user_id: "",
                 destination_id: "",
@@ -259,6 +264,7 @@ const AdminPanel = () => {
                 coordinates: { coordinates: ["", ""] },
                 city: "",
                 country: "",
+                slug: "",
             });
         }
         setShowEditModal(true);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 const Event = require('../models/Event');
 
 /**
@@ -155,7 +156,41 @@ const getEventBySlug = async (req, res) => {
  */
 const createEvent = async (req, res) => {
     try {
-        const newEvent = new Event(req.body);
+        const {
+            name,
+            location,
+            date,
+            user_id,
+            destination_id,
+            image,
+            imageGallery,
+            slug: providedSlug
+        } = req.body;
+
+        // Generate slug if not provided
+        let slug = providedSlug;
+        if (!slug) {
+            slug = slugify(name, { lower: true, strict: true });
+            // Ensure slug is unique
+            let count = 1;
+            let uniqueSlug = slug;
+            while (await Event.findOne({ slug: uniqueSlug })) {
+                uniqueSlug = `${slug}-${count}`;
+                count++;
+            }
+            slug = uniqueSlug;
+        }
+
+        const newEvent = new Event({
+            name,
+            location,
+            date,
+            user_id,
+            destination_id,
+            image,
+            imageGallery: imageGallery || [],
+            slug
+        });
         await newEvent.save();
 
         res.status(201).json({

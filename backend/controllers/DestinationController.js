@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 const Destination = require('../models/Destination');
 const authMiddleware = require('../middleware/authMiddleware'); // Import middleware
 
@@ -144,6 +145,7 @@ exports.createDestination = async (req, res) => {
             short_description,
             long_description,
             imageGallery,
+            slug: providedSlug
         } = req.body;
 
         // Validate coordinates
@@ -154,17 +156,31 @@ exports.createDestination = async (req, res) => {
             });
         }
 
+        // Generate slug if not provided
+        let slug = providedSlug;
+        if (!slug) {
+            slug = slugify(name, { lower: true, strict: true });
+            // Ensure slug is unique
+            let count = 1;
+            let uniqueSlug = slug;
+            while (await Destination.findOne({ slug: uniqueSlug })) {
+                uniqueSlug = `${slug}-${count}`;
+                count++;
+            }
+            slug = uniqueSlug;
+        }
+
         const newDestination = new Destination({
             name,
             image,
             location,
-            coordinates: { type: "Point", coordinates: coordinates.coordinates }, // Ensure GeoJSON format
+            coordinates: { type: "Point", coordinates: coordinates.coordinates },
             city,
             country,
             short_description,
             long_description,
-            imageGallery: imageGallery || [], // Default to empty array if not provided
-            slug,
+            imageGallery: imageGallery || [],
+            slug
         });
         await newDestination.save();
 
