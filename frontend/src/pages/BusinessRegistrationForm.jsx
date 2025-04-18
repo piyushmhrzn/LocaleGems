@@ -51,8 +51,15 @@ const BusinessRegistrationForm = () => {
             });
         } catch (error) {
             setSuccessMessage("");
-            setErrorMessage(error.response?.data?.message || "Failed to register business");
-            console.error("Submission error:", error.response?.data || error.message);
+            const backendError =
+            error.response?.data?.error ||  // e.g., Mongoose or server-generated error
+            error.response?.data?.message || // general message
+            "Failed to register business. Please try again."; // fallback
+
+        setSuccessMessage("");
+        setErrorMessage(backendError);
+
+        console.error("Submission error:", error.response?.data || error.message);
         }
     };
 

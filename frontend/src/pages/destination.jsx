@@ -62,7 +62,7 @@ const Destinations = () => {
         backgroundImage={DestinationBanner}
       />
       <Container>
-        <h2 className="mt-4">Hidden Destinations</h2>
+        <h2 className="mt-4 text-center mb-4">Hidden Destinations</h2>
 
         {loading ? (
           <p>Loading destinations...</p>

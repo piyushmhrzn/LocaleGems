@@ -72,7 +72,7 @@ const Events = () => {
       />
 
       <Container>
-        <h2 className="mt-4">Events</h2>
+        <h2 className="mt-4 text-center mb-4">Events</h2>
 
         <Form className="mb-4">
           <Row>

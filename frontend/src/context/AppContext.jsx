@@ -37,7 +37,7 @@ export const AppProvider = ({ children }) => {
     const fetchDestinations = async (page = 1) => {
         setLoading(true);
         try {
-            const response = await axios.get(`${baseURL}/api/destinations?page=${page}&limit=3`);
+            const response = await axios.get(`${baseURL}/api/destinations?page=${page}&limit=6`);
             setDestinations(response.data.data);
             setTotalDestinationPages(response.data.totalPages);
             setCurrentDestinationPage(page);

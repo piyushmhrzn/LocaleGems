@@ -38,14 +38,14 @@ const createBusiness = async (req, res) => {
             });
         }
 
-        // Check if a user exists with matching contactEmail
+        // Match user by email
         let user_id = null;
         const existingUser = await User.findOne({ email: contactEmail });
         if (existingUser) {
-            user_id = existingUser._id; // Link user_id if email matches
+            user_id = existingUser._id;
         }
 
-        // Geocode location (optional)
+        // Optional Geocoding
         let coordinates = null;
         if (process.env.GOOGLE_MAPS_API_KEY) {
             try {
@@ -62,7 +62,7 @@ const createBusiness = async (req, res) => {
         }
 
         const newBusiness = new Business({
-            user_id, // Null if no matching user
+            user_id,
             name,
             category,
             description,
@@ -72,32 +72,26 @@ const createBusiness = async (req, res) => {
             destination_id: destination,
             proximity_to_destination,
             coordinates,
-            status: 'pending', // Default status
+            status: 'pending',
         });
-        console.log("New Business Object:", newBusiness);
-        try {
-            console.log("Attempting to save business:", newBusiness);
-            const savedBusiness = await newBusiness.save();
-            console.log("Business saved successfully:", savedBusiness);
-        } catch (saveError) {
-            console.error("Error saving business:", saveError.message);
-        }
 
+        const savedBusiness = await newBusiness.save(); // Move this to the outer try block
 
         res.status(201).json({
             success: true,
             message: "Business registered successfully. Waiting for verification",
-            data: newBusiness,
+            data: savedBusiness,
         });
     } catch (error) {
-        console.error("Error in createBusiness:", error.message, error.stack);
+        console.error("Error in createBusiness:", error.message);
         res.status(500).json({
             success: false,
-            message: "Server error",
-            error: error.message,
+            message: "Business registration failed",
+            error: error.message, // send the real reason to frontend
         });
     }
 };
+
 
 /**
  * @desc    Get businesses for the authenticated user

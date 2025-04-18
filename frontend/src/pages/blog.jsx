@@ -47,7 +47,7 @@ const Blogs = () => {
       />
 
       <Container>
-        <h2 className="mt-4">Blogs</h2>
+        <h2 className="mt-4 text-center mb-4">Blogs</h2>
         <Row className="mb-5">
           {blogs.map(blog => (
             <Col key={blog._id} md={4}>

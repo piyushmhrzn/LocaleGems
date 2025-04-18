@@ -10,7 +10,7 @@ const authMiddleware = require('../middleware/authMiddleware'); // Import middle
  */
 exports.getDestinations = async (req, res) => {
     try {
-        let { page = 1, limit = 3 } = req.query;
+        let { page = 1, limit = 6 } = req.query;
         page = parseInt(page);
         limit = parseInt(limit);
 

@@ -76,8 +76,8 @@ const loginUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Server error",
-            error: error.message
+            message: "Registration failed",
+            error: error.message || error.toString()
         });
     }
 };

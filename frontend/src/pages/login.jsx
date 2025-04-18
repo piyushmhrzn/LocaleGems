@@ -36,7 +36,11 @@ const AuthPage = () => {
             setUser(response.data.data);
             navigate("/");
         } catch (error) {
-            setMessage(error.response?.data?.message || "Login failed. Please try again.");
+            const errMessage =
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                "Login failed. Please try again.";
+                setMessage(errMessage);
         }
     };
 
@@ -48,7 +52,11 @@ const AuthPage = () => {
             setSignupData({ firstname: "", lastname: "", email: "", password: "", role: "user" });
             navigate("/login");
         } catch (error) {
-            setMessage(error.response?.data?.message || "Signup failed. Please try again.");
+            const errMessage =
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                "Signup failed. Please try again.";
+                setMessage(errMessage);
         }
     };
 
