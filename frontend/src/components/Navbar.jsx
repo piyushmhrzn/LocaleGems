@@ -197,7 +197,7 @@ const NavBar = () => {
                         {searchResults.destinations.map(dest => (
                           <Dropdown.Item
                             key={dest._id}
-                            onClick={() => handleResultClick("destinations", dest._id)}
+                            onClick={() => handleResultClick("destinations", dest.slug)}
                             className="py-1"
                           >
                             {dest.name}
@@ -211,7 +211,7 @@ const NavBar = () => {
                         {searchResults.events.map(event => (
                           <Dropdown.Item
                             key={event._id}
-                            onClick={() => handleResultClick("events", event._id)}
+                            onClick={() => handleResultClick("events", event.slug)}
                             className="py-1"
                           >
                             {event.name}
@@ -219,7 +219,7 @@ const NavBar = () => {
                         ))}
                       </>
                     )}
-                    {searchResults.blogs.length > 0 && (
+                    {/* {searchResults.blogs.length > 0 && (
                       <>
                         <h6 className="text-light bg-dark p-2 mb-2 mt-3">{t("Blogs")}</h6>
                         {searchResults.blogs.map(blog => (
@@ -232,7 +232,7 @@ const NavBar = () => {
                           </Dropdown.Item>
                         ))}
                       </>
-                    )}
+                    )} */}
                   </div>
                 )}
               </>
