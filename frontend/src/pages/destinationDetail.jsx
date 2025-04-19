@@ -45,7 +45,8 @@ const DestinationDetail = () => {
                     axios.get(`${BASE_URL}/api/comments/destination/${destinationData._id}`),
                 ]);
 
-                const allBusinesses = businessRes.data.data;
+                let allBusinesses = businessRes.data.data;
+                allBusinesses = allBusinesses.filter(biz => biz.status !== "rejected");
                 const allEvents = eventRes.data.data;
                 setRatings(ratingRes.data.data);
                 setComments(commentRes.data.data);
@@ -350,7 +351,7 @@ const DestinationDetail = () => {
                         {businesses.length === 0 ? (
                             <p>{t("No businesses found for this destination.")}</p>
                         ) : (
-                            <Row>
+                            <Row className="nearby">
                                 {businesses.map((business) => (
                                     <Col key={business._id} md={4} className="mb-4">
                                         <img
@@ -359,7 +360,7 @@ const DestinationDetail = () => {
                                                 "https://images.pexels.com/photos/235985/pexels-photo-235985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
                                             }
                                             alt={business.name}
-                                            className="img-fluid rounded"
+                                            className="img-fluid rounded nearby-business"
                                             style={{ width: "100%", height: "auto" }}
                                         />
                                         <h5 className="mt-2">{getBusinessIcon(business.type)}{business.name}</h5>
@@ -383,7 +384,7 @@ const DestinationDetail = () => {
                                         <img
                                             src={event.image || "https://via.placeholder.com/150"}
                                             alt={event.name}
-                                            className="img-fluid rounded"
+                                            className="img-fluid rounded upcoming-events"
                                             style={{ width: "100%", height: "auto" }}
                                         />
                                         <h5 className="mt-2">
